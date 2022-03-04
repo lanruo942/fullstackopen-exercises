@@ -2,7 +2,7 @@
  * @Author: Summer Lee
  * @Date: 2022-03-04 10:28:50
  * @LastEditors: Summer Lee
- * @LastEditTime: 2022-03-04 15:41:25
+ * @LastEditTime: 2022-03-04 15:46:27
  */
 import React, { useState } from 'react'
 
@@ -12,6 +12,10 @@ const Header = ({ title }) => (
 
 const Button = ({ handleClick, text }) => (
   <button onClick={handleClick}>{text}</button>
+)
+
+const StatisticsLine = ({ text, value }) => (
+  <p>{text} {value}</p>
 )
 
 const Statistics = ({ good, neutral, bad }) => {
@@ -24,12 +28,12 @@ const Statistics = ({ good, neutral, bad }) => {
     return (
       <div>
         <h2>Statistics</h2>
-        <p>good {good}</p> 
-        <p>neutral {neutral}</p>
-        <p>bad {bad}</p>
-        <p>all {all}</p>
-        <p>average {average}</p>
-        <p>positive {positive}</p>
+        <StatisticsLine text="good" value={good} />
+        <StatisticsLine text="neutral" value={neutral} />
+        <StatisticsLine text="bad" value={bad} />
+        <StatisticsLine text="all" value={all} />
+        <StatisticsLine text="average" value={average} />
+        <StatisticsLine text="positive" value={positive} />
       </div>
     )
   } else {
