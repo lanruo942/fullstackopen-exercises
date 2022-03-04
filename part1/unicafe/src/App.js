@@ -2,7 +2,7 @@
  * @Author: Summer Lee
  * @Date: 2022-03-04 10:28:50
  * @LastEditors: Summer Lee
- * @LastEditTime: 2022-03-04 14:51:55
+ * @LastEditTime: 2022-03-04 15:32:44
  */
 import React, { useState } from 'react'
 
@@ -14,7 +14,7 @@ const Button = ({ handleClick, text }) => (
   <button onClick={handleClick}>{text}</button>
 )
 
-const Display = ({ good, neutral, bad }) => {
+const Statistics = ({ good, neutral, bad }) => {
   const all = (good + neutral + bad) ? (good + neutral + bad) : 0
   const average = ((good - bad)/all) ? ((good - bad)/all) : 0
   const positive = (good/all) ? (good/all + '%') : '0%'
@@ -55,7 +55,7 @@ const App = () => {
       <Button handleClick={() => setToValue('good')} text="good" />
       <Button handleClick={() => setToValue('neutral')} text="neutral" />
       <Button handleClick={() => setToValue('bad')} text="bad" />
-      <Display good={good} neutral={neutral} bad={bad} />
+      <Statistics good={good} neutral={neutral} bad={bad} />
     </>
   )
 }
