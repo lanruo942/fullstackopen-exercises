@@ -2,12 +2,15 @@
  * @Author: Summer Lee
  * @Date: 2022-03-04 16:09:06
  * @LastEditors: Summer Lee
- * @LastEditTime: 2022-03-04 18:37:13
+ * @LastEditTime: 2022-03-04 19:53:31
  */
 import React, { useState } from 'react'
 
-const Display = ({ value }) => (
-  <div>has {value} votes</div>
+const Display = ({ votes }) => (
+  <div>
+    <h2>Anecdote of the day</h2>
+    <p>has {votes} votes</p>
+  </div>
 )
 
 const Vote = ({ handleClick, text }) => (
@@ -16,6 +19,14 @@ const Vote = ({ handleClick, text }) => (
 
 const Button = ({ handleClick, text}) => (
   <button onClick={handleClick}>{text}</button>
+)
+
+const MostVotes = ({ anecdote, votes }) => (
+  <div>
+    <h2>Anecdote with most votes</h2>
+    <p>{anecdote}</p>
+    <p>has {votes} votes</p>
+  </div>
 )
 
 const App = () => {
@@ -31,6 +42,7 @@ const App = () => {
 
   const [selected, setSelected] = useState(0)
   const [vote, setVote] = useState(new Uint8Array(anecdotes.length))
+  const [mostVote, setMostVote] = useState(0)
 
   const randomNum = (min, max) => {
     min = Math.ceil(min)
@@ -43,6 +55,9 @@ const App = () => {
     const copy = [...vote]
     copy[selected] += 1
     setVote(copy)
+
+    const isLargeNumber = (value) => value >= Math.max.apply(Math, copy)
+    setMostVote(copy.findIndex(isLargeNumber))
   }
 
   const setToValue = (value) => {
@@ -53,9 +68,10 @@ const App = () => {
     <>
       {anecdotes[selected]}
       <br />
-      <Display value={vote[selected]} />
+      <Display votes={vote[selected]} />
       <Vote handleClick={() => setToVote(selected)} text="vote" />
       <Button handleClick={() => setToValue(randomNum(0, anecdotes.length))} text="next anecdote" />
+      <MostVotes anecdote={anecdotes[mostVote]} votes={vote[mostVote]} />
     </>
   )
 }
