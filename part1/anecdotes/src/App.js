@@ -2,9 +2,17 @@
  * @Author: Summer Lee
  * @Date: 2022-03-04 16:09:06
  * @LastEditors: Summer Lee
- * @LastEditTime: 2022-03-04 18:19:38
+ * @LastEditTime: 2022-03-04 18:37:13
  */
 import React, { useState } from 'react'
+
+const Display = ({ value }) => (
+  <div>has {value} votes</div>
+)
+
+const Vote = ({ handleClick, text }) => (
+  <button onClick={handleClick}>{text}</button>
+)
 
 const Button = ({ handleClick, text}) => (
   <button onClick={handleClick}>{text}</button>
@@ -22,12 +30,19 @@ const App = () => {
   ]
 
   const [selected, setSelected] = useState(0)
+  const [vote, setVote] = useState(new Uint8Array(anecdotes.length))
 
   const randomNum = (min, max) => {
     min = Math.ceil(min)
     max = Math.floor(max)
 
     return Math.floor(Math.random() * (max - min)) + min
+  }
+
+  const setToVote = (selected) => {
+    const copy = [...vote]
+    copy[selected] += 1
+    setVote(copy)
   }
 
   const setToValue = (value) => {
@@ -38,6 +53,8 @@ const App = () => {
     <>
       {anecdotes[selected]}
       <br />
+      <Display value={vote[selected]} />
+      <Vote handleClick={() => setToVote(selected)} text="vote" />
       <Button handleClick={() => setToValue(randomNum(0, anecdotes.length))} text="next anecdote" />
     </>
   )
