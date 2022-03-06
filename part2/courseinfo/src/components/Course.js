@@ -2,13 +2,13 @@
  * @Author: Summer Lee
  * @Date: 2022-03-06 10:25:25
  * @LastEditors: Summer Lee
- * @LastEditTime: 2022-03-06 10:47:03
+ * @LastEditTime: 2022-03-06 11:29:31
  */
 import React from 'react'
 
 const Header = ({ course }) => {
 	return (
-		<h1>{course.name}</h1>
+		<h2>{course.name}</h2>
 	)
 }
 
@@ -30,7 +30,7 @@ const Content = ({ parts }) => {
 
 const Total = ({ parts }) => {
 	return (
-		<p>Number of exercises {parts.reduce((sum, part) => sum += part.exercises, 0)}</p>
+		<p><strong>Total of {parts.reduce((sum, part) => sum += part.exercises, 0)} exercises</strong></p>
 	)
 }
 
