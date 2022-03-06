@@ -2,7 +2,7 @@
  * @Author: Summer Lee
  * @Date: 2022-03-06 10:25:25
  * @LastEditors: Summer Lee
- * @LastEditTime: 2022-03-06 10:34:50
+ * @LastEditTime: 2022-03-06 10:47:03
  */
 import React from 'react'
 
@@ -28,9 +28,9 @@ const Content = ({ parts }) => {
 	)
 }
 
-const Total = (props) => {
+const Total = ({ parts }) => {
 	return (
-		<p>Number of exercises {props.parts[0].exercises + props.parts[1].exercises + props.parts[2].exercises}</p>
+		<p>Number of exercises {parts.reduce((sum, part) => sum += part.exercises, 0)}</p>
 	)
 }
 
@@ -39,6 +39,7 @@ const Course = ({ course }) => {
 		<div>
 			<Header course={course} />
 			<Content parts={course.parts} />
+			<Total parts={course.parts} />
 		</div>
 	)
 }
