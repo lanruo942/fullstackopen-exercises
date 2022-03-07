@@ -2,11 +2,13 @@
  * @Author: Summer Lee
  * @Date: 2022-03-06 16:24:41
  * @LastEditors: Summer Lee
- * @LastEditTime: 2022-03-07 15:58:42
+ * @LastEditTime: 2022-03-07 16:19:35
  */
 import React, { useState } from 'react'
 import { nanoid } from 'nanoid'
-import Person from './components/Person'
+import Filter from './components/Filter'
+import PersonForm from './components/PersonForm'
+import Persons from './components/Persons'
 
 const App = () => {
   const [persons, setPersons] = useState([
@@ -74,22 +76,11 @@ const App = () => {
   return (
     <>
       <h2>Phonebook</h2>
-      <div>filter shown with <input onChange={handleNewSearch} /></div>
-      <h2>Add a new</h2>
-      <form onSubmit={addName}>
-        <div>name: <input value={newName} onChange={handleNameChange}/></div>
-        <div>number: <input value={newNumber} onChange={handleNumberChange} /></div>
-        <div><button type="submit">add</button></div>
-      </form>
-      <h2>Numbers</h2>
-      <table>
-        <tbody>
-          {results.length
-            ? results.map(result => <Person key={result.id} person={result} />)
-            : persons.map(person => <Person key={person.id} person={person} />)
-          }
-        </tbody>
-      </table>
+      <Filter handleNewSearch={handleNewSearch} />
+      <h3>Add a new</h3>
+      <PersonForm addName={addName} newName={newName} newNumber={newNumber} handleNameChange={handleNameChange} handleNumberChange={handleNumberChange} />
+      <h3>Numbers</h3>
+      <Persons persons={persons} results={results} />
     </>
   )
 }
