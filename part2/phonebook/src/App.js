@@ -2,7 +2,7 @@
  * @Author: Summer Lee
  * @Date: 2022-03-06 16:24:41
  * @LastEditors: Summer Lee
- * @LastEditTime: 2022-03-07 12:41:02
+ * @LastEditTime: 2022-03-07 13:18:29
  */
 import React, { useState } from 'react'
 import { nanoid } from 'nanoid'
@@ -19,14 +19,23 @@ const App = () => {
 
   const addName = (event) => {
     event.preventDefault()
+    
+    const trimName = newName.trim()
+    const isExist = persons.find(element => {
+      return element.name === trimName
+    })
 
-    const nameObject = {
-      id: nanoid(),
-      name: newName
+    if (isExist) {
+      window.alert(`${trimName} is already added to phonebook`)
+    } else {
+      const nameObject = {
+        id: nanoid(),
+        name: trimName
+      }
+
+      setPersons(persons.concat(nameObject))
+      setNewName('')
     }
-
-    setPersons(persons.concat(nameObject))
-    setNewName('')
   }
 
   const handleNameChange = (event) => {
