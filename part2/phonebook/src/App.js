@@ -2,26 +2,34 @@
  * @Author: Summer Lee
  * @Date: 2022-03-06 16:24:41
  * @LastEditors: Summer Lee
- * @LastEditTime: 2022-03-07 16:19:35
+ * @LastEditTime: 2022-03-09 16:21:09
  */
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { nanoid } from 'nanoid'
+import axios from 'axios'
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import Persons from './components/Persons'
 
+
+
 const App = () => {
-  const [persons, setPersons] = useState([
-    { id: nanoid(), name: 'Arto Hellas', number: '040-123456' },
-    { id: nanoid(), name: 'Ada Lovelace', number: '39-44-5323523' },
-    { id: nanoid(), name: 'Dan Abramov', number: '12-43-234345' },
-    { id: nanoid(), name: 'Mary Poppendieck', number: '39-23-6423122' }
-  ])
+  const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [results, setResults] = useState([])
+  
+  const hook = () => {
+    axios
+      .get('http://localhost:3001/persons')
+      .then(response => {
+        setPersons(response.data)
+      })
+  }
 
-  const addName = (event) => {
+  useEffect(hook, [])
+
+  const addPerson = (event) => {
     event.preventDefault()
     
     const trimName = newName.trim()
@@ -78,7 +86,7 @@ const App = () => {
       <h2>Phonebook</h2>
       <Filter handleNewSearch={handleNewSearch} />
       <h3>Add a new</h3>
-      <PersonForm addName={addName} newName={newName} newNumber={newNumber} handleNameChange={handleNameChange} handleNumberChange={handleNumberChange} />
+      <PersonForm addPerson={addPerson} newName={newName} newNumber={newNumber} handleNameChange={handleNameChange} handleNumberChange={handleNumberChange} />
       <h3>Numbers</h3>
       <Persons persons={persons} results={results} />
     </>
