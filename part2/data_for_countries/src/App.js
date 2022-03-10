@@ -2,7 +2,7 @@
  * @Author: Summer Lee
  * @Date: 2022-03-09 17:07:22
  * @LastEditors: Summer Lee
- * @LastEditTime: 2022-03-10 17:08:06
+ * @LastEditTime: 2022-03-10 19:41:44
  */
 import React, { useState, useEffect} from 'react'
 import axios from 'axios'
@@ -35,11 +35,14 @@ const DisplayCountry = ({ country }) => {
   )
 }
 
-const DisplayLine = ({ name }) => (
-  <div>{name.common}</div>
+const DisplayLine = ({ result, handleShow }) => (
+  <div>
+    {result.name.common}
+    <button onClick={() => handleShow(result)}>show</button>
+  </div>
 )
 
-const Display = ({ results }) => {
+const Display = ({ results, handleShow }) => {
   const reLength = results.length
   if (reLength > 10) {
     return (
@@ -53,20 +56,24 @@ const Display = ({ results }) => {
     return (
       <div>
         {results.map(result => 
-          <DisplayLine key={result.id} name={result.name} />
+          <DisplayLine key={result.id} result={result} handleShow={handleShow} />
         )}
       </div>
     )
   }
 }
 
-const Filter = ({ handleSearch }) => (
-  <div>find countries <input onChange={handleSearch}/></div>
+const Filter = ({ newSearch, handleSearch }) => (
+  <div>
+    find countries&nbsp;
+    <input id="search-name" value={newSearch} onInput={handleSearch}/>
+  </div>
 )
 
 const App = () => {
   const [countries, setCountries] = useState([])
   const [results, setResults] = useState([])
+  const [newSearch, setNewSearch] = useState('')
 
   const getCountries = () => {
     axios
@@ -78,19 +85,25 @@ const App = () => {
 
   useEffect(getCountries, [])
   
-  const handleSearch = (event) => {
+  const handleSearch = (event) => {    
     const search = event.target.value.trim().toLowerCase()
     const list = countries
       .filter(country => country.name.common.toLowerCase().indexOf(search) !== -1)
       .map(v => ({ ...v, id: nanoid() }))
-    
+
+    setNewSearch(event.target.value)
     setResults(list)
+  }
+
+  const handleShow = (result) => {
+    setNewSearch(result.name.common)
+    setResults(new Array(result))
   }
 
   return (
     <>
-      <Filter handleSearch={handleSearch} />
-      <Display results={results} />
+      <Filter newSearch={newSearch} handleSearch={handleSearch} />
+      <Display results={results} handleShow={handleShow} />
     </>
   )
 }
