@@ -2,7 +2,7 @@
  * @Author: Summer Lee
  * @Date: 2022-03-06 16:24:41
  * @LastEditors: Summer Lee
- * @LastEditTime: 2022-03-12 21:12:37
+ * @LastEditTime: 2022-03-12 22:09:35
  */
 import React, { useState, useEffect } from 'react'
 import { nanoid } from 'nanoid'
@@ -44,7 +44,16 @@ const App = () => {
     })
 
     if (isExist) {
-      return window.alert(`${trimName} is already added to phonebook`)
+      if (window.confirm(`${trimName} is already added to phonebook, replace the old number with a new one?`)) {
+        personService
+          .update(isExist.id, { ...isExist, number: trimNumber})
+          .then(returnedPerson => {
+            setPersons(persons.map(person => person.id !== isExist.id ? person : returnedPerson))
+            setResults(results.map(result => result.id !== isExist.id ? result : returnedPerson))
+            setNewName('')
+            setNewNumber('')
+          })
+      }
     } else {
       const personObject = {
         name: trimName,
