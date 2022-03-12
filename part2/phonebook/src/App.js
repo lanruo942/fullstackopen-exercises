@@ -2,7 +2,7 @@
  * @Author: Summer Lee
  * @Date: 2022-03-06 16:24:41
  * @LastEditors: Summer Lee
- * @LastEditTime: 2022-03-12 20:16:02
+ * @LastEditTime: 2022-03-12 21:12:37
  */
 import React, { useState, useEffect } from 'react'
 import { nanoid } from 'nanoid'
@@ -66,7 +66,7 @@ const App = () => {
     const newSearch = event.target.value.trim().toLowerCase()
     const list = persons.filter(person => person.name.toLowerCase().indexOf(newSearch) !== -1)
 
-    if (list.length === 0) {
+    if (newSearch === '' || list.length === 0) {
       setResults([])
     } else {
       setResults(list)
@@ -81,6 +81,19 @@ const App = () => {
     setNewNumber(event.target.value)
   }
 
+  const delPersonOf = id => {
+    if (window.confirm(`Delete ${persons.find(n => n.id === id).name} ?`)) {
+      personService
+        .delPerson(id)
+        .then(response => {
+          if (response.status === 200) {
+            setPersons(persons.filter(n => n.id !== id))
+            setResults(results.filter(n => n.id !== id))
+          }
+        })
+    }
+  }
+
   return (
     <>
       <h2>Phonebook</h2>
@@ -88,7 +101,7 @@ const App = () => {
       <h3>Add a new</h3>
       <PersonForm addPerson={addPerson} newName={newName} newNumber={newNumber} handleNameChange={handleNameChange} handleNumberChange={handleNumberChange} />
       <h3>Numbers</h3>
-      <Persons persons={persons} results={results} />
+      <Persons persons={persons} results={results} delPersonOf={delPersonOf} />
     </>
   )
 }
