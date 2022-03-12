@@ -2,7 +2,7 @@
  * @Author: Summer Lee
  * @Date: 2022-03-06 16:24:41
  * @LastEditors: Summer Lee
- * @LastEditTime: 2022-03-09 16:21:09
+ * @LastEditTime: 2022-03-12 19:59:45
  */
 import React, { useState, useEffect } from 'react'
 import { nanoid } from 'nanoid'
@@ -18,16 +18,14 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [results, setResults] = useState([])
-  
-  const hook = () => {
+
+  useEffect(() => {
     axios
       .get('http://localhost:3001/persons')
       .then(response => {
         setPersons(response.data)
       })
-  }
-
-  useEffect(hook, [])
+  }, [])
 
   const addPerson = (event) => {
     event.preventDefault()
@@ -48,17 +46,21 @@ const App = () => {
     })
 
     if (isExist) {
-      window.alert(`${trimName} is already added to phonebook`)
+      return window.alert(`${trimName} is already added to phonebook`)
     } else {
-      const nameObject = {
-        id: nanoid(),
+      const personObject = {
         name: trimName,
-        number: trimNumber
+        number: trimNumber,
+        id: nanoid()
       }
-
-      setPersons(persons.concat(nameObject))
-      setNewName('')
-      setNewNumber('')
+      
+      axios
+        .post('http://localhost:3001/persons', personObject)
+        .then(response => {
+          setPersons(persons.concat(response.data))
+          setNewName('')
+          setNewNumber('')
+        })
     }
   }
 
