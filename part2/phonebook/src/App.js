@@ -2,16 +2,14 @@
  * @Author: Summer Lee
  * @Date: 2022-03-06 16:24:41
  * @LastEditors: Summer Lee
- * @LastEditTime: 2022-03-12 19:59:45
+ * @LastEditTime: 2022-03-12 20:16:02
  */
 import React, { useState, useEffect } from 'react'
 import { nanoid } from 'nanoid'
-import axios from 'axios'
+import personService from './services/persons'
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import Persons from './components/Persons'
-
-
 
 const App = () => {
   const [persons, setPersons] = useState([])
@@ -20,10 +18,10 @@ const App = () => {
   const [results, setResults] = useState([])
 
   useEffect(() => {
-    axios
-      .get('http://localhost:3001/persons')
-      .then(response => {
-        setPersons(response.data)
+    personService
+      .getAll()
+      .then(initialPersons => {
+        setPersons(initialPersons)
       })
   }, [])
 
@@ -54,10 +52,10 @@ const App = () => {
         id: nanoid()
       }
       
-      axios
-        .post('http://localhost:3001/persons', personObject)
-        .then(response => {
-          setPersons(persons.concat(response.data))
+      personService
+        .create(personObject)
+        .then(returnedPerson => {
+          setPersons(persons.concat(returnedPerson))
           setNewName('')
           setNewNumber('')
         })
