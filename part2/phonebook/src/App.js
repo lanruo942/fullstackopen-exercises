@@ -2,7 +2,7 @@
  * @Author: Summer Lee
  * @Date: 2022-03-06 16:24:41
  * @LastEditors: Summer Lee
- * @LastEditTime: 2022-03-12 22:09:35
+ * @LastEditTime: 2022-03-13 13:56:27
  */
 import React, { useState, useEffect } from 'react'
 import { nanoid } from 'nanoid'
@@ -10,12 +10,14 @@ import personService from './services/persons'
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import Persons from './components/Persons'
+import Notification from './components/notification/Notification'
 
 const App = () => {
   const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [results, setResults] = useState([])
+  const [successMessage, setSuccessMessage] = useState(null)
 
   useEffect(() => {
     personService
@@ -48,6 +50,10 @@ const App = () => {
         personService
           .update(isExist.id, { ...isExist, number: trimNumber})
           .then(returnedPerson => {
+            setSuccessMessage(`Updated ${returnedPerson.name}`)
+            setTimeout(() => {
+              setSuccessMessage(null)
+            }, 5000);
             setPersons(persons.map(person => person.id !== isExist.id ? person : returnedPerson))
             setResults(results.map(result => result.id !== isExist.id ? result : returnedPerson))
             setNewName('')
@@ -64,6 +70,10 @@ const App = () => {
       personService
         .create(personObject)
         .then(returnedPerson => {
+          setSuccessMessage(`Added ${returnedPerson.name}`)
+          setTimeout(() => {
+            setSuccessMessage(null)
+          }, 5000);
           setPersons(persons.concat(returnedPerson))
           setNewName('')
           setNewNumber('')
@@ -106,6 +116,7 @@ const App = () => {
   return (
     <>
       <h2>Phonebook</h2>
+      <Notification message={successMessage} />
       <Filter handleNewSearch={handleNewSearch} />
       <h3>Add a new</h3>
       <PersonForm addPerson={addPerson} newName={newName} newNumber={newNumber} handleNameChange={handleNameChange} handleNumberChange={handleNumberChange} />
