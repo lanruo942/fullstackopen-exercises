@@ -2,7 +2,7 @@
  * @Author: Summer Lee
  * @Date: 2022-03-06 16:24:41
  * @LastEditors: Summer Lee
- * @LastEditTime: 2022-03-13 13:56:27
+ * @LastEditTime: 2022-03-13 14:42:04
  */
 import React, { useState, useEffect } from 'react'
 import { nanoid } from 'nanoid'
@@ -17,7 +17,8 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [results, setResults] = useState([])
-  const [successMessage, setSuccessMessage] = useState(null)
+  const [alertMessage, setAlertMessage] = useState(null)
+  const [alertLevel, setAlertLevel] = useState('')
 
   useEffect(() => {
     personService
@@ -26,6 +27,12 @@ const App = () => {
         setPersons(initialPersons)
       })
   }, [])
+
+  const resetAlertMessage = () => {
+    setTimeout(() => {
+      setAlertMessage(null)
+    }, 5000);
+  }
 
   const addPerson = (event) => {
     event.preventDefault()
@@ -47,15 +54,25 @@ const App = () => {
 
     if (isExist) {
       if (window.confirm(`${trimName} is already added to phonebook, replace the old number with a new one?`)) {
+        const changePerson = { ...isExist, number: trimNumber}
+        
         personService
-          .update(isExist.id, { ...isExist, number: trimNumber})
+          .update(isExist.id, changePerson)
           .then(returnedPerson => {
-            setSuccessMessage(`Updated ${returnedPerson.name}`)
-            setTimeout(() => {
-              setSuccessMessage(null)
-            }, 5000);
+            setAlertLevel('success')
+            setAlertMessage(`Updated ${returnedPerson.name}`)
+            resetAlertMessage()
             setPersons(persons.map(person => person.id !== isExist.id ? person : returnedPerson))
             setResults(results.map(result => result.id !== isExist.id ? result : returnedPerson))
+            setNewName('')
+            setNewNumber('')
+          })
+          .catch(error => {
+            setAlertLevel('error')
+            setAlertMessage(`Information of ${changePerson.name} has already been removed from server`)
+            resetAlertMessage()
+            setPersons(persons.filter(person => person.id !== isExist.id))
+            setResults(results.filter(result => result.id !== isExist.id))
             setNewName('')
             setNewNumber('')
           })
@@ -70,10 +87,9 @@ const App = () => {
       personService
         .create(personObject)
         .then(returnedPerson => {
-          setSuccessMessage(`Added ${returnedPerson.name}`)
-          setTimeout(() => {
-            setSuccessMessage(null)
-          }, 5000);
+          setAlertLevel('success')
+          setAlertMessage(`Added ${returnedPerson.name}`)
+          resetAlertMessage()
           setPersons(persons.concat(returnedPerson))
           setNewName('')
           setNewNumber('')
@@ -101,7 +117,8 @@ const App = () => {
   }
 
   const delPersonOf = id => {
-    if (window.confirm(`Delete ${persons.find(n => n.id === id).name} ?`)) {
+    const person = persons.find(n => n.id === id)
+    if (window.confirm(`Delete ${person.name} ?`)) {
       personService
         .delPerson(id)
         .then(response => {
@@ -110,13 +127,20 @@ const App = () => {
             setResults(results.filter(n => n.id !== id))
           }
         })
+        .catch(error => {
+          setAlertLevel('error')
+          setAlertMessage(`Information of ${person.name} has already been removed from server`)
+          resetAlertMessage()
+          setPersons(persons.filter(n => n.id !== id))
+          setResults(results.filter(n => n.id !== id))
+        })
     }
   }
 
   return (
     <>
       <h2>Phonebook</h2>
-      <Notification message={successMessage} />
+      <Notification level={alertLevel} message={alertMessage} />
       <Filter handleNewSearch={handleNewSearch} />
       <h3>Add a new</h3>
       <PersonForm addPerson={addPerson} newName={newName} newNumber={newNumber} handleNameChange={handleNameChange} handleNumberChange={handleNumberChange} />
