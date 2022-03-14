@@ -2,9 +2,10 @@
  * @Author: Summer Lee
  * @Date: 2022-03-14 15:58:41
  * @LastEditors: Summer Lee
- * @LastEditTime: 2022-03-14 16:03:24
+ * @LastEditTime: 2022-03-14 16:46:01
  */
 const express = require('express')
+const { type } = require('os')
 
 const app = express()
 
@@ -30,6 +31,17 @@ const persons = [
 		"number": "39-23-6423122"
 	}
 ]
+
+app.get('/api/info', (req, res) => {
+	const amount = persons.reduce((count, person) => {
+		if (typeof person === 'object') {
+			return ++count
+		}
+	}, 0)
+
+	const body = `<div><p>Phonebook has info for ${amount} people</p><p>${new Date()}</p></div>`
+	res.send(body)
+})
 
 app.get('/api/persons', (req, res) => {
 	res.json(persons)
