@@ -2,7 +2,7 @@
  * @Author: Summer Lee
  * @Date: 2022-03-14 15:58:41
  * @LastEditors: Summer Lee
- * @LastEditTime: 2022-03-14 17:51:18
+ * @LastEditTime: 2022-03-14 18:01:25
  */
 const express = require('express')
 const app = express()
@@ -60,10 +60,17 @@ app.get('/api/persons/:id', (req, res) => {
 
 app.post('/api/persons', (req, res) => {
 	const body = req.body
+	const isExist = persons.find(p => p.name === body.name)
 
 	if (!body.name || !body.number) {
 		return res.status(400).json({
 			error: 'name or number missing'
+		})
+	}
+
+	if (isExist) {
+		return res.status(403).json({
+			error: 'name must be unique'
 		})
 	}
 
