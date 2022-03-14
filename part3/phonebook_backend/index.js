@@ -2,12 +2,12 @@
  * @Author: Summer Lee
  * @Date: 2022-03-14 15:58:41
  * @LastEditors: Summer Lee
- * @LastEditTime: 2022-03-14 17:28:28
+ * @LastEditTime: 2022-03-14 17:51:18
  */
 const express = require('express')
-const { type } = require('os')
-
 const app = express()
+
+app.use(express.json())
 
 let persons = [
 	{ 
@@ -56,6 +56,26 @@ app.get('/api/persons/:id', (req, res) => {
 	} else {
 		res.status(404).end()
 	}
+})
+
+app.post('/api/persons', (req, res) => {
+	const body = req.body
+
+	if (!body.name || !body.number) {
+		return res.status(400).json({
+			error: 'name or number missing'
+		})
+	}
+
+	const person = {
+		name: body.name,
+		number: body.number,
+		id: Math.floor(Math.random() * 100000000)
+	}
+
+	persons = persons.concat(person)
+
+	res.json(persons)
 })
 
 app.delete('/api/persons/:id', (req, res) => {
