@@ -2,12 +2,14 @@
  * @Author: Summer Lee
  * @Date: 2022-03-14 15:58:41
  * @LastEditors: Summer Lee
- * @LastEditTime: 2022-03-14 18:01:25
+ * @LastEditTime: 2022-03-14 20:29:42
  */
 const express = require('express')
+const morgan = require('morgan')
 const app = express()
 
 app.use(express.json())
+app.use(morgan('tiny'))
 
 let persons = [
 	{ 
