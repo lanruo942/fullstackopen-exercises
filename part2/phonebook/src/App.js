@@ -2,7 +2,7 @@
  * @Author: Summer Lee
  * @Date: 2022-03-06 16:24:41
  * @LastEditors: Summer Lee
- * @LastEditTime: 2022-03-13 14:42:04
+ * @LastEditTime: 2022-03-13 15:05:56
  */
 import React, { useState, useEffect } from 'react'
 import { nanoid } from 'nanoid'
@@ -54,7 +54,7 @@ const App = () => {
 
     if (isExist) {
       if (window.confirm(`${trimName} is already added to phonebook, replace the old number with a new one?`)) {
-        const changePerson = { ...isExist, number: trimNumber}
+        const changePerson = { ...isExist, number: trimNumber }
         
         personService
           .update(isExist.id, changePerson)
