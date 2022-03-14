@@ -2,14 +2,16 @@
  * @Author: Summer Lee
  * @Date: 2022-03-14 15:58:41
  * @LastEditors: Summer Lee
- * @LastEditTime: 2022-03-14 20:29:42
+ * @LastEditTime: 2022-03-14 21:15:44
  */
 const express = require('express')
 const morgan = require('morgan')
 const app = express()
 
+morgan.token('body', (req, res) => Object.keys(req.body).length ? JSON.stringify(req.body) : ' ')
+
 app.use(express.json())
-app.use(morgan('tiny'))
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
 
 let persons = [
 	{ 
