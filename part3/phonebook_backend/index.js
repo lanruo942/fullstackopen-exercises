@@ -2,7 +2,7 @@
  * @Author: Summer Lee
  * @Date: 2022-03-14 15:58:41
  * @LastEditors: Summer Lee
- * @LastEditTime: 2022-03-14 16:46:01
+ * @LastEditTime: 2022-03-14 16:55:30
  */
 const express = require('express')
 const { type } = require('os')
@@ -45,6 +45,17 @@ app.get('/api/info', (req, res) => {
 
 app.get('/api/persons', (req, res) => {
 	res.json(persons)
+})
+
+app.get('/api/persons/:id', (req, res) => {
+	const id = Number(req.params.id)
+	const person = persons.find(p => p.id === id)
+
+	if (person) {
+		res.json(person)
+	} else {
+		res.status(404).end()
+	}
 })
 
 const PORT = 3001
