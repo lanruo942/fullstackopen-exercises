@@ -2,7 +2,7 @@
  * @Author: Summer Lee
  * @Date: 2022-03-14 15:58:41
  * @LastEditors: Summer Lee
- * @LastEditTime: 2022-03-15 22:56:24
+ * @LastEditTime: 2022-03-15 23:31:11
  */
 const express = require('express')
 const cors = require('cors')
@@ -11,6 +11,7 @@ const app = express()
 
 app.use(express.json())
 app.use(cors())
+app.use(express.static('build'))
 
 let persons = [
 	{ 
