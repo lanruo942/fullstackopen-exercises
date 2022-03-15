@@ -2,10 +2,9 @@
  * @Author: Summer Lee
  * @Date: 2022-03-06 16:24:41
  * @LastEditors: Summer Lee
- * @LastEditTime: 2022-03-13 15:05:56
+ * @LastEditTime: 2022-03-15 20:36:30
  */
 import React, { useState, useEffect } from 'react'
-import { nanoid } from 'nanoid'
 import personService from './services/persons'
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
@@ -80,8 +79,7 @@ const App = () => {
     } else {
       const personObject = {
         name: trimName,
-        number: trimNumber,
-        id: nanoid()
+        number: trimNumber
       }
       
       personService
@@ -93,6 +91,27 @@ const App = () => {
           setPersons(persons.concat(returnedPerson))
           setNewName('')
           setNewNumber('')
+        })
+    }
+  }
+
+  const delPersonOf = id => {
+    const person = persons.find(n => n.id === id)
+    if (window.confirm(`Delete ${person.name} ?`)) {
+      personService
+        .delPerson(id)
+        .then(response => {
+          if (response.status === 204) {
+            setPersons(persons.filter(n => n.id !== id))
+            setResults(results.filter(n => n.id !== id))
+          }
+        })
+        .catch(error => {
+          setAlertLevel('error')
+          setAlertMessage(`Information of ${person.name} has already been removed from server`)
+          resetAlertMessage()
+          setPersons(persons.filter(n => n.id !== id))
+          setResults(results.filter(n => n.id !== id))
         })
     }
   }
@@ -114,27 +133,6 @@ const App = () => {
 
   const handleNumberChange = (event) => {
     setNewNumber(event.target.value)
-  }
-
-  const delPersonOf = id => {
-    const person = persons.find(n => n.id === id)
-    if (window.confirm(`Delete ${person.name} ?`)) {
-      personService
-        .delPerson(id)
-        .then(response => {
-          if (response.status === 200) {
-            setPersons(persons.filter(n => n.id !== id))
-            setResults(results.filter(n => n.id !== id))
-          }
-        })
-        .catch(error => {
-          setAlertLevel('error')
-          setAlertMessage(`Information of ${person.name} has already been removed from server`)
-          resetAlertMessage()
-          setPersons(persons.filter(n => n.id !== id))
-          setResults(results.filter(n => n.id !== id))
-        })
-    }
   }
 
   return (

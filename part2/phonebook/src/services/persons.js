@@ -2,10 +2,10 @@
  * @Author: Summer Lee
  * @Date: 2022-03-12 19:50:27
  * @LastEditors: Summer Lee
- * @LastEditTime: 2022-03-12 22:04:52
+ * @LastEditTime: 2022-03-15 21:16:19
  */
 import axios from 'axios'
-const baseUrl = 'http://localhost:3001/persons'
+const baseUrl = '/api/persons'
 
 const getAll = () => (
 	axios

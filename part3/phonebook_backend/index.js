@@ -2,16 +2,15 @@
  * @Author: Summer Lee
  * @Date: 2022-03-14 15:58:41
  * @LastEditors: Summer Lee
- * @LastEditTime: 2022-03-14 21:15:44
+ * @LastEditTime: 2022-03-15 22:56:24
  */
 const express = require('express')
-const morgan = require('morgan')
+const cors = require('cors')
+const { nanoid } = require('nanoid')
 const app = express()
 
-morgan.token('body', (req, res) => Object.keys(req.body).length ? JSON.stringify(req.body) : ' ')
-
 app.use(express.json())
-app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
+app.use(cors())
 
 let persons = [
 	{ 
@@ -35,6 +34,14 @@ let persons = [
 		"number": "39-23-6423122"
 	}
 ]
+
+const personFind = (v, id) => Object.prototype.toString.call(v.id) === '[object String]'
+	? v.id === id
+	: String(v.id) === id
+
+const personFilter = (v, id) => Object.prototype.toString.call(v.id) === '[object String]'
+	? v.id !== id
+	: String(v.id) !== id
 
 app.get('/api/info', (req, res) => {
 	const amount = persons.reduce((count, person) => {
@@ -81,22 +88,37 @@ app.post('/api/persons', (req, res) => {
 	const person = {
 		name: body.name,
 		number: body.number,
-		id: Math.floor(Math.random() * 100000000)
+		id: nanoid()
 	}
 
 	persons = persons.concat(person)
+	
+	res.json(person)
+})
 
-	res.json(persons)
+app.put('/api/persons/:id', (req, res) => {
+	const body = req.body
+	
+	persons = persons.map(p => p.id === body.id ? body : p)
+	
+	res.json(body)
 })
 
 app.delete('/api/persons/:id', (req, res) => {
-	const id = Number(req.params.id)
-	persons = persons.filter(p => p.id !== id)
+	const id = req.params.id
+	const person = persons.find(p => personFind(p, id))
 
-	res.status(204).end()
+	if (person) {
+		persons = persons.filter(p => personFilter(p, id))
+
+		res.status(204).end()
+	} else {
+		res.status(404).end()
+	}
+	
 })
 
-const PORT = 3001
+const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
 	console.log(`Server running on port ${PORT}`)
 })
