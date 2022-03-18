@@ -2,13 +2,12 @@
  * @Author: Summer Lee
  * @Date: 2022-03-14 15:58:41
  * @LastEditors: Summer Lee
- * @LastEditTime: 2022-03-18 14:56:00
+ * @LastEditTime: 2022-03-18 16:10:05
  */
 require('dotenv').config()
 const express = require('express')
 const Person = require('./models/person')
 const cors = require('cors')
-const { nanoid } = require('nanoid')
 const app = express()
 
 app.use(express.json())
@@ -76,7 +75,6 @@ app.get('/api/persons/:id', (req, res) => {
 
 app.post('/api/persons', (req, res) => {
 	const body = req.body
-	const isExist = persons.find(p => p.name === body.name)
 
 	if (!body.name || !body.number) {
 		return res.status(400).json({
@@ -84,21 +82,25 @@ app.post('/api/persons', (req, res) => {
 		})
 	}
 
-	if (isExist) {
-		return res.status(403).json({
-			error: 'name must be unique'
-		})
-	}
+	// if (isExist) {
+	// 	return res.status(403).json({
+	// 		error: 'name must be unique'
+	// 	})
+	// }
 
-	const person = {
+	const person = new Person({
 		name: body.name,
 		number: body.number,
-		id: nanoid()
-	}
+	})
 
-	persons = persons.concat(person)
-	
-	res.json(person)
+	person
+		.save()
+		.then(savedPerson => {
+			res.json(person)
+		})
+		.catch(error => {
+			console.log('new data does note added: ', error.message)
+		})
 })
 
 app.put('/api/persons/:id', (req, res) => {
