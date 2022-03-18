@@ -2,9 +2,11 @@
  * @Author: Summer Lee
  * @Date: 2022-03-14 15:58:41
  * @LastEditors: Summer Lee
- * @LastEditTime: 2022-03-17 13:58:21
+ * @LastEditTime: 2022-03-18 14:56:00
  */
+require('dotenv').config()
 const express = require('express')
+const Person = require('./models/person')
 const cors = require('cors')
 const { nanoid } = require('nanoid')
 const app = express()
@@ -56,7 +58,9 @@ app.get('/api/info', (req, res) => {
 })
 
 app.get('/api/persons', (req, res) => {
-	res.json(persons)
+	Person.find({}).then(persons => {
+		res.json(persons)
+	})
 })
 
 app.get('/api/persons/:id', (req, res) => {
