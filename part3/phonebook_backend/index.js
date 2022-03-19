@@ -2,43 +2,12 @@
  * @Author: Summer Lee
  * @Date: 2022-03-14 15:58:41
  * @LastEditors: Summer Lee
- * @LastEditTime: 2022-03-19 11:42:44
+ * @LastEditTime: 2022-03-19 12:01:12
  */
 require('dotenv').config()
 const express = require('express')
 const Person = require('./models/person')
 const app = express()
-
-let persons = [
-	{ 
-		"id": 1,
-		"name": "Arto Hellas", 
-		"number": "040-123456"
-	},
-	{ 
-		"id": 2,
-		"name": "Ada Lovelace", 
-		"number": "39-44-5323523"
-	},
-	{ 
-		"id": 3,
-		"name": "Dan Abramov", 
-		"number": "12-43-234345"
-	},
-	{ 
-		"id": 4,
-		"name": "Mary Poppendieck", 
-		"number": "39-23-6423122"
-	}
-]
-
-const personFind = (v, id) => Object.prototype.toString.call(v.id) === '[object String]'
-	? v.id === id
-	: String(v.id) === id
-
-const personFilter = (v, id) => Object.prototype.toString.call(v.id) === '[object String]'
-	? v.id !== id
-	: String(v.id) !== id
 
 app.use(express.static('build'))
 app.use(express.json())
@@ -90,12 +59,17 @@ app.post('/api/persons', (request, response, next) => {
 		.catch(error => next(error))
 })
 
-app.put('/api/persons/:id', (request, response) => {
+app.put('/api/persons/:id', (request, response, next) => {
 	const body = request.body
 	
-	persons = persons.map(p => p.id === body.id ? body : p)
-	
-	response.json(body)
+	const person = {
+		number: body.number,
+	}
+	Person.findByIdAndUpdate(request.params.id, person, { new: true })
+		.then(updatedPerson => {
+			response.json(updatedPerson)
+		})
+		.catch(error => next(error))
 })
 
 app.delete('/api/persons/:id', (request, response, next) => {
