@@ -2,7 +2,7 @@
  * @Author: Summer Lee
  * @Date: 2022-03-06 16:24:41
  * @LastEditors: Summer Lee
- * @LastEditTime: 2022-03-15 20:36:30
+ * @LastEditTime: 2022-03-19 16:30:59
  */
 import React, { useState, useEffect } from 'react'
 import personService from './services/persons'
@@ -91,6 +91,10 @@ const App = () => {
           setPersons(persons.concat(returnedPerson))
           setNewName('')
           setNewNumber('')
+        })
+        .catch(error => {
+          setAlertLevel('error')
+          setAlertMessage(error.response.data.error)
         })
     }
   }

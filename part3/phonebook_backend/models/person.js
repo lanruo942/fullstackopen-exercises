@@ -2,7 +2,7 @@
  * @Author: Summer Lee
  * @Date: 2022-03-18 14:40:11
  * @LastEditors: Summer Lee
- * @LastEditTime: 2022-03-18 14:50:10
+ * @LastEditTime: 2022-03-19 16:04:03
  */
 const mongoose = require('mongoose')
 
@@ -17,7 +17,11 @@ mongoose.connect(url)
 	})
 
 const personSchema = new mongoose.Schema({
-	name: String,
+	name: {
+		type: String,
+		minLength: 3,
+		required: true
+	},
 	number: String,
 })
 
