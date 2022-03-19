@@ -2,7 +2,7 @@
  * @Author: Summer Lee
  * @Date: 2022-03-06 16:24:41
  * @LastEditors: Summer Lee
- * @LastEditTime: 2022-03-19 16:30:59
+ * @LastEditTime: 2022-03-19 18:26:08
  */
 import React, { useState, useEffect } from 'react'
 import personService from './services/persons'
@@ -38,6 +38,7 @@ const App = () => {
     
     const trimName = newName.trim()
     const trimNumber = newNumber.trim()
+    const numberReg = /^\d{2,3}-?\d+$/
 
     if (trimName === '') {
       return window.alert('Please enter your name.')
@@ -45,6 +46,10 @@ const App = () => {
 
     if (trimNumber === '') {
       return window.alert('Please enter your number.')
+    }
+
+    if (trimNumber.replace(/\D/g, '').length < 8 || !numberReg.test(trimNumber)) {
+      return window.alert('Your number is illegal. e.g. 040-22334455, 09-1234556')
     }
 
     const isExist = persons.find(element => {
@@ -95,6 +100,7 @@ const App = () => {
         .catch(error => {
           setAlertLevel('error')
           setAlertMessage(error.response.data.error)
+          resetAlertMessage()
         })
     }
   }

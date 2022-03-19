@@ -2,7 +2,7 @@
  * @Author: Summer Lee
  * @Date: 2022-03-14 15:58:41
  * @LastEditors: Summer Lee
- * @LastEditTime: 2022-03-19 16:37:08
+ * @LastEditTime: 2022-03-19 19:23:11
  */
 require('dotenv').config()
 const express = require('express')
@@ -47,15 +47,23 @@ app.post('/api/persons', (request, response, next) => {
 		})
 	}
 
-	const person = new Person({
-		name: body.name,
-		number: body.number,
-	})
+	const postPerson = () => {
+		const person = new Person({
+			name: body.name,
+			number: body.number,
+		})
 
-	person
-		.save()
-		.then(savedPerson => {
-			response.json(savedPerson)
+		person
+			.save()
+			.then(savedPerson => {
+				response.json(savedPerson)
+			})
+			.catch(error => next(error))
+	}
+
+	Person.find({ name: body.name })
+		.then(result => {
+			return result.length ? response.status(403).send({ error: 'name repeat'}) : postPerson()
 		})
 		.catch(error => next(error))
 })
@@ -67,6 +75,7 @@ app.put('/api/persons/:id', (request, response, next) => {
 		name: body.name,
 		number: body.number,
 	}
+	
 	Person.findByIdAndUpdate(request.params.id, person, { new: true, runValidators: true })
 		.then(updatedPerson => {
 			response.json(updatedPerson)
