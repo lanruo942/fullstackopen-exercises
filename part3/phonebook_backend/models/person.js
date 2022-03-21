@@ -2,14 +2,14 @@
  * @Author: Summer Lee
  * @Date: 2022-03-18 14:40:11
  * @LastEditors: Summer Lee
- * @LastEditTime: 2022-03-19 16:51:49
+ * @LastEditTime: 2022-03-21 12:28:07
  */
 const mongoose = require('mongoose')
 
 const url = process.env.MONGODB_URI
 
 mongoose.connect(url)
-	.then(result => {
+	.then(() => {
 		console.log('connected to MongoDB')
 	})
 	.catch(error => {
