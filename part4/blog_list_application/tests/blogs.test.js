@@ -2,7 +2,7 @@
  * @Author: Summer Lee
  * @Date: 2022-04-11 15:26:25
  * @LastEditors: Summer Lee
- * @LastEditTime: 2022-04-12 16:40:48
+ * @LastEditTime: 2022-04-14 18:19:47
  */
 const listHelper = require('../utils/list_helper')
 
@@ -119,6 +119,35 @@ describe('favorite blog', () => {
 
 	test('when list has many blogs, the favorite blog like that', () => {
 		const result = listHelper.favoriteBlog(blogs)
+		expect(result).toEqual(manyResult)
+	})
+})
+
+describe('most blogs', () => {
+	const oneResult = {
+		author: 'Edsger W. Dijkstra',
+		blogs: 1
+	}
+
+	const zeroResult = 'blog list is empty.'
+
+	const manyResult = {
+		author: 'Robert C. Martin',
+		blogs: 3
+	}
+
+	test('when list has only one blog, the most blogs author like that', () => {
+		const result = listHelper.mostBlogs(listWithOneBlog)
+		expect(result).toEqual(oneResult)
+	})
+
+	test('when list is empty, return {}', () => {
+		const result = listHelper.mostBlogs([])
+		expect(result).toEqual(zeroResult)
+	})
+
+	test('when list has many blogs, the most blogs author like that', () => {
+		const result = listHelper.mostBlogs(blogs)
 		expect(result).toEqual(manyResult)
 	})
 })
