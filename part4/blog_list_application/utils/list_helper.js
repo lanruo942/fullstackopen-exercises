@@ -2,7 +2,7 @@
  * @Author: Summer Lee
  * @Date: 2022-04-10 21:26:24
  * @LastEditors: Summer Lee
- * @LastEditTime: 2022-04-19 17:37:11
+ * @LastEditTime: 2022-04-20 17:48:19
  */
 const _ = require('lodash')
 
@@ -35,8 +35,7 @@ const favoriteBlog = (blogs) => {
 const mostBlogs = (blogs) => {
 	// lodash
 	if (blogs.length !== 0) {
-		let authors = _.countBy(blogs, 'author')
-		console.log(authors)
+		const authors = _.countBy(blogs, 'author')
 		const author = _.reduce(authors, (result, value, key) => {
 			return result.blogs > value ? result : { author: key, blogs: value }
 		}, { author: 'Anonymous', blogs: 0 })
@@ -78,9 +77,32 @@ const mostBlogs = (blogs) => {
 	// }
 }
 
+const mostLikes = (blogs) => {
+	if (blogs.length !== 0) {
+		const authors = _.reduce(blogs, (result, value, key) => {
+			if (result[value.author]) {
+				result[value.author] += value.likes
+			} else {
+				result[value.author] = value.likes
+			}
+
+			return result
+		}, {})
+
+		const author = _.reduce(authors, (result, value, key) => {
+			return result.likes > value ? result : { author: key, likes: value }
+		}, { author: 'Anonymous', likes: 0 })
+
+		return author
+	} else {
+		return 'blog list is empty.'
+	}
+}
+
 module.exports = {
 	dummy,
 	totalLikes,
 	favoriteBlog,
-	mostBlogs
+	mostBlogs,
+	mostLikes
 }

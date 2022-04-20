@@ -2,7 +2,7 @@
  * @Author: Summer Lee
  * @Date: 2022-04-11 15:26:25
  * @LastEditors: Summer Lee
- * @LastEditTime: 2022-04-14 18:19:47
+ * @LastEditTime: 2022-04-20 17:51:19
  */
 const listHelper = require('../utils/list_helper')
 
@@ -123,7 +123,7 @@ describe('favorite blog', () => {
 	})
 })
 
-describe('most blogs', () => {
+describe('most blogs author', () => {
 	const oneResult = {
 		author: 'Edsger W. Dijkstra',
 		blogs: 1
@@ -141,13 +141,42 @@ describe('most blogs', () => {
 		expect(result).toEqual(oneResult)
 	})
 
-	test('when list is empty, return {}', () => {
+	test('when list is empty, return alert message', () => {
 		const result = listHelper.mostBlogs([])
-		expect(result).toEqual(zeroResult)
+		expect(result).toBe(zeroResult)
 	})
 
 	test('when list has many blogs, the most blogs author like that', () => {
 		const result = listHelper.mostBlogs(blogs)
+		expect(result).toEqual(manyResult)
+	})
+})
+
+describe('most likes author', () => {
+	const oneResult = {
+		author: 'Edsger W. Dijkstra',
+		likes: 5
+	}
+
+	const zeroResult = 'blog list is empty.'
+
+	const manyResult = {
+		author: 'Edsger W. Dijkstra',
+		likes: 17
+	}
+
+	test('when list has only one blog, the most likes author like that', () => {
+		const result = listHelper.mostLikes(listWithOneBlog)
+		expect(result).toEqual(oneResult)
+	})
+
+	test('when list is empty, return alert message', () => {
+		const result = listHelper.mostLikes([])
+		expect(result).toBe(zeroResult)
+	})
+
+	test('when list has many blogs, the most likes author like that', () => {
+		const result = listHelper.mostLikes(blogs)
 		expect(result).toEqual(manyResult)
 	})
 })
