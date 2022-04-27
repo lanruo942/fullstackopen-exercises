@@ -2,7 +2,7 @@
  * @Author: Summer Lee
  * @Date: 2022-04-26 23:50:17
  * @LastEditors: Summer Lee
- * @LastEditTime: 2022-04-27 17:19:08
+ * @LastEditTime: 2022-04-27 19:23:25
  */
 const mongoose = require('mongoose')
 const supertest = require('supertest')
@@ -31,6 +31,12 @@ test('there are two blogs', async () => {
 	const response = await api.get('/api/blogs')
 
 	expect(response.body).toHaveLength(helper.initialBlogs.length)
+})
+
+test('id is the unique identifier', async () => {
+	const response = await api.get('/api/blogs')
+
+	expect(response.body[0].id).toBeDefined()
 })
 
 afterAll(() => {
