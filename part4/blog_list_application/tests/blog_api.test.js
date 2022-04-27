@@ -2,7 +2,7 @@
  * @Author: Summer Lee
  * @Date: 2022-04-26 23:50:17
  * @LastEditors: Summer Lee
- * @LastEditTime: 2022-04-27 23:18:31
+ * @LastEditTime: 2022-04-28 00:06:44
  */
 const mongoose = require('mongoose')
 const supertest = require('supertest')
@@ -72,6 +72,22 @@ test('if likes unset, default value is zero', async () => {
 
 	const blogsAtEnd = await helper.blogsInDb()
 	expect(blogsAtEnd[helper.initialBlogs.length]['likes']).toBe(0)
+})
+
+test('blog without title or url is not added', async () => {
+	const newBlog = {
+		title: 'Canonical string reduction',
+		author: 'Edsger W. Dijkstra',
+		likes: 7
+	}
+
+	await api
+		.post('/api/blogs')
+		.send(newBlog)
+		.expect(400)
+
+	const blogsAtEnd = await helper.blogsInDb()
+	expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length)
 })
 
 afterAll(() => {
