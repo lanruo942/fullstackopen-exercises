@@ -2,10 +2,11 @@
  * @Author: Summer Lee
  * @Date: 2022-03-24 14:56:52
  * @LastEditors: Summer Lee
- * @LastEditTime: 2022-03-25 15:37:35
+ * @LastEditTime: 2022-04-27 19:55:39
  */
 const config = require('./utils/config')
 const express = require('express')
+require('express-async-errors')
 const app = express()
 const cors = require('cors')
 const blogsRouter = require('./controllers/blogs')

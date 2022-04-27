@@ -2,7 +2,7 @@
  * @Author: Summer Lee
  * @Date: 2022-04-26 23:50:17
  * @LastEditors: Summer Lee
- * @LastEditTime: 2022-04-27 19:23:25
+ * @LastEditTime: 2022-04-27 23:05:51
  */
 const mongoose = require('mongoose')
 const supertest = require('supertest')
@@ -37,6 +37,24 @@ test('id is the unique identifier', async () => {
 	const response = await api.get('/api/blogs')
 
 	expect(response.body[0].id).toBeDefined()
+})
+
+test('a valid blog can be added', async () => {
+	const newBlog = {
+		title: 'Canonical string reduction',
+		author: 'Edsger W. Dijkstra',
+		url: 'http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html',
+		likes: 12
+	}
+
+	await api
+		.post('/api/blogs')
+		.send(newBlog)
+		.expect(201)
+		.expect('Content-Type', /application\/json/)
+
+	const blogsAtEnd = await helper.blogsInDb()
+	expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length + 1)
 })
 
 afterAll(() => {
