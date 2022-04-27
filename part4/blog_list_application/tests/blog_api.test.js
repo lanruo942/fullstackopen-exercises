@@ -2,7 +2,7 @@
  * @Author: Summer Lee
  * @Date: 2022-04-26 23:50:17
  * @LastEditors: Summer Lee
- * @LastEditTime: 2022-04-27 23:05:51
+ * @LastEditTime: 2022-04-27 23:18:31
  */
 const mongoose = require('mongoose')
 const supertest = require('supertest')
@@ -55,6 +55,23 @@ test('a valid blog can be added', async () => {
 
 	const blogsAtEnd = await helper.blogsInDb()
 	expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length + 1)
+})
+
+test('if likes unset, default value is zero', async () => {
+	const newBlog = {
+		title: 'Canonical string reduction',
+		author: 'Edsger W. Dijkstra',
+		url: 'http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html'
+	}
+
+	await api
+		.post('/api/blogs')
+		.send(newBlog)
+		.expect(201)
+		.expect('Content-Type', /application\/json/)
+
+	const blogsAtEnd = await helper.blogsInDb()
+	expect(blogsAtEnd[helper.initialBlogs.length]['likes']).toBe(0)
 })
 
 afterAll(() => {
