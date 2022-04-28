@@ -2,7 +2,7 @@
  * @Author: Summer Lee
  * @Date: 2022-04-26 23:50:17
  * @LastEditors: Summer Lee
- * @LastEditTime: 2022-04-28 14:47:20
+ * @LastEditTime: 2022-04-28 16:03:48
  */
 const mongoose = require('mongoose')
 const supertest = require('supertest')
@@ -106,6 +106,26 @@ describe('deletion of a blog', () => {
 
 		const titles = blogsAtEnd.map(b => b.title)
 		expect(titles).not.toContain(blogToDelete.title)
+	})
+})
+
+describe('update of a blog', () => {
+	test('succeeds with valid data', async () => {
+		const blogsAtStart = await helper.blogsInDb()
+		const blogToUpdate = blogsAtStart[0]
+
+		const blog = {
+			likes: 101,
+		}
+
+		const response = await api
+			.patch(`/api/blogs/${blogToUpdate.id}`)
+			.send(blog)
+			.expect(200)
+			.expect('Content-Type', /application\/json/)
+
+		const blogsAtEnd = await helper.blogsInDb()
+		expect(response.body).toEqual(blogsAtEnd[0])
 	})
 })
 

@@ -2,7 +2,7 @@
  * @Author: Summer Lee
  * @Date: 2022-03-24 15:13:58
  * @LastEditors: Summer Lee
- * @LastEditTime: 2022-04-28 01:52:06
+ * @LastEditTime: 2022-04-28 16:03:40
  */
 const blogsRouter = require('express').Router()
 const Blog = require('../models/blog')
@@ -29,6 +29,13 @@ blogsRouter.post('/', async (request, response) => {
 blogsRouter.delete('/:id', async (request, response) => {
 	await Blog.findByIdAndRemove(request.params.id)
 	response.status(204).end()
+})
+
+blogsRouter.patch('/:id', async (request, response) => {
+	const blog = request.body
+
+	const updatedBlog = await Blog.findByIdAndUpdate(request.params.id, blog, { new: true })
+	response.json(updatedBlog)
 })
 
 module.exports = blogsRouter
