@@ -2,7 +2,7 @@
  * @Author: Summer Lee
  * @Date: 2022-04-27 00:56:41
  * @LastEditors: Summer Lee
- * @LastEditTime: 2022-04-27 16:42:59
+ * @LastEditTime: 2022-04-28 01:55:26
  */
 const Blog = require('../models/blog')
 
@@ -20,6 +20,19 @@ const initialBlogs = [
 		likes: 5,
 	},
 ]
+
+const nonExistingId = async () => {
+	const blog = new Blog({
+		title: 'test',
+		author: 'test',
+		url: 'test'
+	})
+
+	await blog.save()
+	await blog.remove()
+
+	return blog._id.toString()
+}
 
 const blogsInDb = async () => {
 	const blogs = await Blog.find({})

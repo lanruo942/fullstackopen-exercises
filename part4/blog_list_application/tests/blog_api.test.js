@@ -2,7 +2,7 @@
  * @Author: Summer Lee
  * @Date: 2022-04-26 23:50:17
  * @LastEditors: Summer Lee
- * @LastEditTime: 2022-04-28 00:06:44
+ * @LastEditTime: 2022-04-28 14:47:20
  */
 const mongoose = require('mongoose')
 const supertest = require('supertest')
@@ -14,80 +14,99 @@ const Blog = require('../models/blog')
 beforeEach(async () => {
 	await Blog.deleteMany({})
 
-	for (let blog of helper.initialBlogs) {
-		let blogObject = new Blog(blog)
-		await blogObject.save()
-	}
+	await Blog.insertMany(helper.initialBlogs)
 })
 
-test('blogs are returned as json', async () => {
-	await api
-		.get('/api/blogs')
-		.expect(200)
-		.expect('Content-Type', /application\/json/)
+describe('when there is initially some blogs saved', () => {
+	test('blogs are returned as json', async () => {
+		await api
+			.get('/api/blogs')
+			.expect(200)
+			.expect('Content-Type', /application\/json/)
+	})
+
+	test('all blogs are returned', async () => {
+		const response = await api.get('/api/blogs')
+		expect(response.body).toHaveLength(helper.initialBlogs.length)
+	})
+
+	test('id is the unique identifier', async () => {
+		const response = await api.get('/api/blogs')
+		expect(response.body[0].id).toBeDefined()
+	})
 })
 
-test('there are two blogs', async () => {
-	const response = await api.get('/api/blogs')
+describe('addition of a new blog', () => {
+	test('succeeds with valid data', async () => {
+		const newBlog = {
+			title: 'Canonical string reduction',
+			author: 'Edsger W. Dijkstra',
+			url: 'http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html',
+			likes: 12
+		}
 
-	expect(response.body).toHaveLength(helper.initialBlogs.length)
+		await api
+			.post('/api/blogs')
+			.send(newBlog)
+			.expect(201)
+			.expect('Content-Type', /application\/json/)
+
+		const blogsAtEnd = await helper.blogsInDb()
+		expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length + 1)
+
+		const titles = blogsAtEnd.map(b => b.title)
+		expect(titles).toContain('Canonical string reduction')
+	})
+
+	test('if likes unset, default value is zero', async () => {
+		const newBlog = {
+			title: 'Canonical string reduction',
+			author: 'Edsger W. Dijkstra',
+			url: 'http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html'
+		}
+
+		await api
+			.post('/api/blogs')
+			.send(newBlog)
+			.expect(201)
+			.expect('Content-Type', /application\/json/)
+
+		const blogsAtEnd = await helper.blogsInDb()
+		expect(blogsAtEnd[helper.initialBlogs.length]['likes']).toBe(0)
+	})
+
+	test('blog without title or url is not added', async () => {
+		const newBlog = {
+			title: 'Canonical string reduction',
+			author: 'Edsger W. Dijkstra',
+			likes: 7
+		}
+
+		await api
+			.post('/api/blogs')
+			.send(newBlog)
+			.expect(400)
+
+		const blogsAtEnd = await helper.blogsInDb()
+		expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length)
+	})
 })
 
-test('id is the unique identifier', async () => {
-	const response = await api.get('/api/blogs')
+describe('deletion of a blog', () => {
+	test('succeeds with status code 204 if id is valid', async () => {
+		const blogsAtStart = await helper.blogsInDb()
+		const blogToDelete = blogsAtStart[0]
 
-	expect(response.body[0].id).toBeDefined()
-})
+		await api
+			.delete(`/api/blogs/${blogToDelete.id}`)
+			.expect(204)
 
-test('a valid blog can be added', async () => {
-	const newBlog = {
-		title: 'Canonical string reduction',
-		author: 'Edsger W. Dijkstra',
-		url: 'http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html',
-		likes: 12
-	}
+		const blogsAtEnd = await helper.blogsInDb()
+		expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length - 1)
 
-	await api
-		.post('/api/blogs')
-		.send(newBlog)
-		.expect(201)
-		.expect('Content-Type', /application\/json/)
-
-	const blogsAtEnd = await helper.blogsInDb()
-	expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length + 1)
-})
-
-test('if likes unset, default value is zero', async () => {
-	const newBlog = {
-		title: 'Canonical string reduction',
-		author: 'Edsger W. Dijkstra',
-		url: 'http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html'
-	}
-
-	await api
-		.post('/api/blogs')
-		.send(newBlog)
-		.expect(201)
-		.expect('Content-Type', /application\/json/)
-
-	const blogsAtEnd = await helper.blogsInDb()
-	expect(blogsAtEnd[helper.initialBlogs.length]['likes']).toBe(0)
-})
-
-test('blog without title or url is not added', async () => {
-	const newBlog = {
-		title: 'Canonical string reduction',
-		author: 'Edsger W. Dijkstra',
-		likes: 7
-	}
-
-	await api
-		.post('/api/blogs')
-		.send(newBlog)
-		.expect(400)
-
-	const blogsAtEnd = await helper.blogsInDb()
-	expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length)
+		const titles = blogsAtEnd.map(b => b.title)
+		expect(titles).not.toContain(blogToDelete.title)
+	})
 })
 
 afterAll(() => {
