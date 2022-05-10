@@ -2,7 +2,7 @@
  * @Author: Summer Lee
  * @Date: 2022-03-24 14:56:52
  * @LastEditors: Summer Lee
- * @LastEditTime: 2022-04-27 19:55:39
+ * @LastEditTime: 2022-05-10 12:51:10
  */
 const config = require('./utils/config')
 const express = require('express')
@@ -10,6 +10,7 @@ require('express-async-errors')
 const app = express()
 const cors = require('cors')
 const blogsRouter = require('./controllers/blogs')
+const usersRouter = require('./controllers/users')
 const logger = require('./utils/logger')
 const middleware = require('./utils/middleware')
 const mongoose = require('mongoose')
@@ -27,6 +28,7 @@ app.use(express.json())
 app.use(middleware.requestLogger)
 
 app.use('/api/blogs', blogsRouter)
+app.use('/api/users', usersRouter)
 
 app.use(middleware.unknownEndpoint)
 app.use(middleware.errorHandler)
