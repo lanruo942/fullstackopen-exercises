@@ -2,9 +2,10 @@
  * @Author: Summer Lee
  * @Date: 2022-04-27 00:56:41
  * @LastEditors: Summer Lee
- * @LastEditTime: 2022-04-28 01:55:26
+ * @LastEditTime: 2022-05-13 01:29:51
  */
 const Blog = require('../models/blog')
+const User = require('../models/user')
 
 const initialBlogs = [
 	{
@@ -19,6 +20,19 @@ const initialBlogs = [
 		url: 'http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html',
 		likes: 5,
 	},
+]
+
+const initialUsers = [
+	{
+		username: 'root',
+		name: 'root',
+		passwordHash: '$2b$10$SXRdW4ydELdeEC2Sb8IOzO9KngdaMioKvE9q0TqIdCw6wJsJTnJEO'
+	},
+	{
+		username: 'mluukkai',
+		name: 'Matti Luukkainen',
+		passwordHash: '$2b$10$focrT/nWQiTESHBp8cXZVOfBBJWNJr0b1V09vTqFLYGdN4Z60QoG.'
+	}
 ]
 
 const nonExistingId = async () => {
@@ -40,7 +54,16 @@ const blogsInDb = async () => {
 	return blogs.map(blog => blog.toJSON())
 }
 
+const usersInDb = async () => {
+	const users = await User.find({})
+
+	return users.map(user => user.toJSON())
+}
+
 module.exports = {
 	initialBlogs,
-	blogsInDb
+	initialUsers,
+	nonExistingId,
+	blogsInDb,
+	usersInDb
 }

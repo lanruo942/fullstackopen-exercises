@@ -2,7 +2,7 @@
  * @Author: Summer Lee
  * @Date: 2022-05-10 12:12:49
  * @LastEditors: Summer Lee
- * @LastEditTime: 2022-05-10 12:18:41
+ * @LastEditTime: 2022-05-13 02:33:51
  */
 const mongoose = require('mongoose')
 const uniqueValidator = require('mongoose-unique-validator')
@@ -10,10 +10,21 @@ const uniqueValidator = require('mongoose-unique-validator')
 const userSchema = new mongoose.Schema({
 	username: {
 		type: String,
+		required: true,
+		minLength: 4,
 		unique: true
 	},
 	name: String,
-	passwordHash: String,
+	passwordHash: {
+		type: String,
+		required: true
+	},
+	// blogs: [
+	// 	{
+	// 		type: mongoose.Schema.Types.ObjectId,
+	// 		ref: 'Blog'
+	// 	}
+	// ]
 })
 
 userSchema.plugin(uniqueValidator)
