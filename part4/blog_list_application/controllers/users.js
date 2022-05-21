@@ -2,14 +2,14 @@
  * @Author: Summer Lee
  * @Date: 2022-05-10 12:12:44
  * @LastEditors: Summer Lee
- * @LastEditTime: 2022-05-13 02:25:05
+ * @LastEditTime: 2022-05-21 23:02:55
  */
 const bcrypt = require('bcrypt')
 const usersRouter = require('express').Router()
 const User = require('../models/user')
 
 usersRouter.get('/', async (request, response) => {
-	const users = await User.find({})
+	const users = await User.find({}).populate('blogs', { url: 1, title: 1, author: 1, id: 1 })
 
 	response.json(users)
 })

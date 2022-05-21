@@ -2,7 +2,7 @@
  * @Author: Summer Lee
  * @Date: 2022-03-24 15:13:24
  * @LastEditors: Summer Lee
- * @LastEditTime: 2022-04-28 00:03:30
+ * @LastEditTime: 2022-05-13 02:49:59
  */
 const mongoose = require('mongoose')
 
@@ -16,7 +16,11 @@ const blogSchema = new mongoose.Schema({
 		type: String,
 		required: true
 	},
-	likes: Number
+	likes: Number,
+	user: {
+		type: mongoose.Schema.Types.ObjectId,
+		ref: 'User'
+	}
 })
 
 blogSchema.set('toJSON', {
