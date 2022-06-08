@@ -2,7 +2,7 @@
  * @Author: Summer Lee
  * @Date: 2022-03-24 18:13:30
  * @LastEditors: Summer Lee
- * @LastEditTime: 2022-03-24 18:25:11
+ * @LastEditTime: 2022-06-04 13:04:12
  */
 const logger = require('./logger')
 
@@ -36,4 +36,3 @@ module.exports = {
 	unknownEndpoint,
 	errorHandler
 }
-
