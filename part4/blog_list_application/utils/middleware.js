@@ -2,7 +2,7 @@
  * @Author: Summer Lee
  * @Date: 2022-03-24 18:13:30
  * @LastEditors: Summer Lee
- * @LastEditTime: 2022-06-04 13:04:12
+ * @LastEditTime: 2022-06-09 01:22:18
  */
 const logger = require('./logger')
 
@@ -20,13 +20,17 @@ const unknownEndpoint = (request, response) => {
 }
 
 const errorHandler = (error, request, response, next) => {
-	logger.error(error.message)
-
 	if (error.name === 'CastError' && error.kind === 'ObjectId') {
 		return response.status(400).send({ error: 'malformatted id' })
 	} else if (error.name === 'ValidationError') {
 		return response.status(400).json({ error: error.message })
+	} else if (error.name === 'JsonWebTokenError') {
+		return response.status(401).json({ error: 'invalid token' })
+	} else if (error.name === 'TokenExpiredError') {
+		return response.status(401).json({ error: 'token expired' })
 	}
+
+	logger.error(error.message)
 
 	next(error)
 }

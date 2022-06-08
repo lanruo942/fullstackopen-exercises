@@ -2,7 +2,7 @@
  * @Author: Summer Lee
  * @Date: 2022-06-08 15:31:37
  * @LastEditors: Summer Lee
- * @LastEditTime: 2022-06-08 15:45:53
+ * @LastEditTime: 2022-06-09 01:20:58
  */
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
@@ -28,7 +28,11 @@ loginRouter.post('/', async (request, response) => {
 		id: user._id
 	}
 
-	const token = jwt.sign(userForToken, process.env.SECRET)
+	const token = jwt.sign(
+		userForToken,
+		process.env.SECRET,
+		{ expiresIn: 60*60 }
+	)
 
 	response
 		.status(200)
