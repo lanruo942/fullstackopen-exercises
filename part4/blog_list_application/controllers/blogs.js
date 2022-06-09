@@ -2,7 +2,7 @@
  * @Author: Summer Lee
  * @Date: 2022-03-24 15:13:58
  * @LastEditors: Summer Lee
- * @LastEditTime: 2022-06-09 23:18:20
+ * @LastEditTime: 2022-06-10 01:00:03
  */
 const blogsRouter = require('express').Router()
 const Blog = require('../models/blog')
@@ -42,7 +42,24 @@ blogsRouter.post('/', async (request, response) => {
 })
 
 blogsRouter.delete('/:id', async (request, response) => {
-	await Blog.findByIdAndRemove(request.params.id)
+	const decodedToken = jwt.verify(request.token, process.env.SECRET)
+
+	if (!decodedToken.id) {
+		return response.status(401).json({ error: 'token missing or invalid' })
+	}
+
+	const user = await User.findById(decodedToken.id)
+	const blog = await Blog.findById(request.params.id)
+
+	if (!blog) {
+		return response.status(404).json({ error: 'id invalid' })
+	}
+
+	if (blog.user.toString() !== user.id.toString()) {
+		return response.status(403).end()
+	}
+
+	await blog.remove()
 	response.status(204).end()
 })
 
