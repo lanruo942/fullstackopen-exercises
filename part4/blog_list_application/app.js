@@ -2,7 +2,7 @@
  * @Author: Summer Lee
  * @Date: 2022-03-24 14:56:52
  * @LastEditors: Summer Lee
- * @LastEditTime: 2022-06-09 23:17:46
+ * @LastEditTime: 2022-06-10 01:26:24
  */
 const config = require('./utils/config')
 const express = require('express')
@@ -29,7 +29,7 @@ app.use(express.json())
 app.use(middleware.requestLogger)
 app.use(middleware.tokenExtractor)
 
-app.use('/api/blogs', blogsRouter)
+app.use('/api/blogs', middleware.userExtractor, blogsRouter)
 app.use('/api/users', usersRouter)
 app.use('/api/login', loginRouter)
 
