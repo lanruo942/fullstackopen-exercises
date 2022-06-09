@@ -2,9 +2,18 @@
  * @Author: Summer Lee
  * @Date: 2022-03-24 18:13:30
  * @LastEditors: Summer Lee
- * @LastEditTime: 2022-06-09 01:22:18
+ * @LastEditTime: 2022-06-09 23:17:02
  */
 const logger = require('./logger')
+
+const tokenExtractor = (request, response, next) => {
+	const authorization = request.get('authorization')
+	if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
+		request.token = authorization.substring(7)
+	}
+
+	next()
+}
 
 const requestLogger = (request, response, next) => {
 	logger.info('Method: ', request.method)
@@ -36,6 +45,7 @@ const errorHandler = (error, request, response, next) => {
 }
 
 module.exports = {
+	tokenExtractor,
 	requestLogger,
 	unknownEndpoint,
 	errorHandler
