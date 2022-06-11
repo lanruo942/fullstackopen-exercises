@@ -2,7 +2,7 @@
  * @Author: Summer Lee
  * @Date: 2022-04-26 23:50:17
  * @LastEditors: Summer Lee
- * @LastEditTime: 2022-04-28 16:03:48
+ * @LastEditTime: 2022-06-12 01:11:07
  */
 const mongoose = require('mongoose')
 const supertest = require('supertest')
@@ -10,11 +10,18 @@ const helper = require('./test_helper')
 const app = require('../app')
 const api = supertest(app)
 const Blog = require('../models/blog')
+const User = require('../models/user')
 
 beforeEach(async () => {
 	await Blog.deleteMany({})
 
-	await Blog.insertMany(helper.initialBlogs)
+	const user = await User.findOne({ username: 'mluukkai' })
+
+	const blogsAddUserid = helper.initialBlogs.map(blog => {
+		blog.user = user._id
+		return blog
+	})
+	await Blog.insertMany(blogsAddUserid)
 })
 
 describe('when there is initially some blogs saved', () => {
@@ -42,11 +49,22 @@ describe('addition of a new blog', () => {
 			title: 'Canonical string reduction',
 			author: 'Edsger W. Dijkstra',
 			url: 'http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html',
-			likes: 12
+			likes: 12,
 		}
+
+		const userInfo = {
+			username: 'mluukkai',
+			password: 'salainen'
+		}
+
+		const response = await api
+			.post('/api/login')
+			.send(userInfo)
+			.expect(200)
 
 		await api
 			.post('/api/blogs')
+			.set('Authorization', `bearer ${response.body.token}`)
 			.send(newBlog)
 			.expect(201)
 			.expect('Content-Type', /application\/json/)
@@ -62,11 +80,22 @@ describe('addition of a new blog', () => {
 		const newBlog = {
 			title: 'Canonical string reduction',
 			author: 'Edsger W. Dijkstra',
-			url: 'http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html'
+			url: 'http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html',
 		}
+
+		const userInfo = {
+			username: 'mluukkai',
+			password: 'salainen'
+		}
+
+		const response = await api
+			.post('/api/login')
+			.send(userInfo)
+			.expect(200)
 
 		await api
 			.post('/api/blogs')
+			.set('Authorization', `bearer ${response.body.token}`)
 			.send(newBlog)
 			.expect(201)
 			.expect('Content-Type', /application\/json/)
@@ -82,10 +111,36 @@ describe('addition of a new blog', () => {
 			likes: 7
 		}
 
+		const userInfo = {
+			username: 'mluukkai',
+			password: 'salainen'
+		}
+
+		const response = await api
+			.post('/api/login')
+			.send(userInfo)
+			.expect(200)
+
+		await api
+			.post('/api/blogs')
+			.set('Authorization', `bearer ${response.body.token}`)
+			.send(newBlog)
+			.expect(400)
+
+		const blogsAtEnd = await helper.blogsInDb()
+		expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length)
+	})
+	test('token no exist is not added', async () => {
+		const newBlog = {
+			title: 'Canonical string reduction',
+			author: 'Edsger W. Dijkstra',
+			likes: 7
+		}
+
 		await api
 			.post('/api/blogs')
 			.send(newBlog)
-			.expect(400)
+			.expect(401)
 
 		const blogsAtEnd = await helper.blogsInDb()
 		expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length)
@@ -97,8 +152,19 @@ describe('deletion of a blog', () => {
 		const blogsAtStart = await helper.blogsInDb()
 		const blogToDelete = blogsAtStart[0]
 
+		const userInfo = {
+			username: 'mluukkai',
+			password: 'salainen'
+		}
+
+		const response = await api
+			.post('/api/login')
+			.send(userInfo)
+			.expect(200)
+
 		await api
 			.delete(`/api/blogs/${blogToDelete.id}`)
+			.set('Authorization', `bearer ${response.body.token}`)
 			.expect(204)
 
 		const blogsAtEnd = await helper.blogsInDb()
@@ -125,7 +191,9 @@ describe('update of a blog', () => {
 			.expect('Content-Type', /application\/json/)
 
 		const blogsAtEnd = await helper.blogsInDb()
-		expect(response.body).toEqual(blogsAtEnd[0])
+		const blogFirst = { ...blogsAtEnd[0], user: blogsAtEnd[0].user.toJSON() }
+
+		expect(response.body).toEqual(blogFirst)
 	})
 })
 

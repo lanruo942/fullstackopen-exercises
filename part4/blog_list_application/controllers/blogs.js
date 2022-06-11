@@ -2,17 +2,18 @@
  * @Author: Summer Lee
  * @Date: 2022-03-24 15:13:58
  * @LastEditors: Summer Lee
- * @LastEditTime: 2022-06-10 01:46:33
+ * @LastEditTime: 2022-06-12 02:33:19
  */
 const blogsRouter = require('express').Router()
 const Blog = require('../models/blog')
+const middleware = require('../utils/middleware')
 
 blogsRouter.get('/', async (request, response) => {
 	const blogs = await Blog.find({}).populate('user', { username: 1, name: 1, id: 1 })
 	response.json(blogs)
 })
 
-blogsRouter.post('/', async (request, response) => {
+blogsRouter.post('/', middleware.userExtractor, async (request, response) => {
 	const body = request.body
 	const user = request.user
 
@@ -33,7 +34,7 @@ blogsRouter.post('/', async (request, response) => {
 	response.status(201).json(savedBlog)
 })
 
-blogsRouter.delete('/:id', async (request, response) => {
+blogsRouter.delete('/:id', middleware.userExtractor, async (request, response) => {
 	const user = request.user
 	const blog = await Blog.findById(request.params.id)
 
