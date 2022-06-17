@@ -2,7 +2,7 @@
  * @Author: Summer Lee
  * @Date: 2022-06-17 03:13:07
  * @LastEditors: Summer Lee
- * @LastEditTime: 2022-06-17 16:50:25
+ * @LastEditTime: 2022-06-17 17:00:19
  */
 import { useState, useEffect } from 'react'
 import LoginForm from './components/LoginForm'
@@ -26,6 +26,16 @@ const App = () => {
       )  
   }, [])
 
+  useEffect(() => {
+    const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
+
+    if (loggedUserJSON) {
+      const user = JSON.parse(loggedUserJSON)
+      setUser(user)
+      blogService.setToken(user.token)
+    }
+  }, [])
+
   const handleLogin = async (event) => {
     event.preventDefault()
 
@@ -34,6 +44,9 @@ const App = () => {
         username, password,
       })
 
+      window.localStorage.setItem(
+        'loggedBlogappUser', JSON.stringify(user)
+      )
       blogService.setToken(user.token)
       setUser(user)
       setUsername('')
@@ -47,7 +60,9 @@ const App = () => {
   }
 
   const handleLogout = () => {
-
+    window.localStorage.removeItem('loggedBlogappUser')
+    blogService.setToken(null)
+    setUser(null)
   }
 
   const handleUsernameChange = ({ target }) => setUsername(target.value)
