@@ -2,13 +2,17 @@
  * @Author: Summer Lee
  * @Date: 2022-06-17 16:45:09
  * @LastEditors: Summer Lee
- * @LastEditTime: 2022-06-17 16:46:47
+ * @LastEditTime: 2022-06-18 03:37:15
  */
 import React from 'react'
+import Notification from './Notification'
 
-const LoginForm = ({ handleLogin, username, password, handleUsernameChange, handlePasswordChange }) => (
+const LoginForm = ({ handleLogin, username, password, handleUsernameChange, handlePasswordChange, message, messageStatus }) => (
   <div>
     <h2>log in to application</h2>
+    
+    <Notification message={message} messageStatus={messageStatus} />
+    
     <form onSubmit={handleLogin}>
       <div>
         <label htmlFor="Username">username</label>

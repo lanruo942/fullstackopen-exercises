@@ -2,18 +2,23 @@
  * @Author: Summer Lee
  * @Date: 2022-06-17 03:13:07
  * @LastEditors: Summer Lee
- * @LastEditTime: 2022-06-17 17:00:19
+ * @LastEditTime: 2022-06-18 03:38:13
  */
 import { useState, useEffect } from 'react'
 import LoginForm from './components/LoginForm'
-import BlogsForm from './components/BlogsForm'
+import BlogsForm from './components/Blogs/Form'
+import BlogsCreate from './components/Blogs/Create'
 import Notification from './components/Notification'
 import blogService from './services/blogs'
 import loginService from './services/login'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
-  const [errorMessage, setErrorMessage] = useState(null)
+  const [title, setTitle] = useState('')
+  const [author, setAuthor] = useState('')
+  const [url, setUrl] = useState('')
+  const [message, setMessage] = useState(null)
+  const [messageStatus, setMessageStatus] = useState('success')
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
@@ -52,9 +57,10 @@ const App = () => {
       setUsername('')
       setPassword('')
     } catch (exception) {
-      setErrorMessage('Wrong credentials')
+      setMessageStatus('error')
+      setMessage('Wrong username or password')
       setTimeout(() => {
-        setErrorMessage(null)
+        setMessage(null)
       }, 5000)
     }
   }
@@ -65,14 +71,42 @@ const App = () => {
     setUser(null)
   }
 
+  const addBlog = event => {
+    event.preventDefault()
+
+    const newObject = {
+      title: title,
+      author: author,
+      url: url,
+    }
+
+    blogService
+      .create(newObject)
+      .then(returnedBlog => {
+        setBlogs(blogs.concat(returnedBlog))
+        setTitle('')
+        setAuthor('')
+        setUrl('')
+        setMessageStatus('success')
+        setMessage(`a new blog ${newObject.title} by ${newObject.author} added`)
+        setTimeout(() => {
+          setMessage(null)
+        }, 5000)
+      })
+  }
+
   const handleUsernameChange = ({ target }) => setUsername(target.value)
-  
+
   const handlePasswordChange = ({ target }) => setPassword(target.value)
+  
+  const handleTitleChange = ({ target }) => setTitle(target.value)
+
+  const handleAuthorChange = ({ target }) => setAuthor(target.value)
+
+  const handleUrlChange = ({ target }) => setUrl(target.value)
 
   return (
-    <div>
-      <Notification message={errorMessage} />
-      
+    <div>      
       {user === null ?
         <LoginForm
           handleLogin={handleLogin}
@@ -80,14 +114,29 @@ const App = () => {
           password={password}
           handleUsernameChange={handleUsernameChange}
           handlePasswordChange={handlePasswordChange}
+          message={message}
+          messageStatus={messageStatus}
         /> :
-        <BlogsForm
-          user={user}
-          blogs={blogs}
-          handleLogout={handleLogout}
-        />
+        <div>
+          <BlogsForm
+            user={user}
+            blogs={blogs}
+            handleLogout={handleLogout}
+            message={message}
+            messageStatus={messageStatus}
+          />
+          <BlogsCreate
+            title={title}  
+            author={author}
+            url={url}
+            addBlog={addBlog}
+            handleTitleChange={handleTitleChange}
+            handleAuthorChange={handleAuthorChange}
+            handleUrlChange={handleUrlChange}
+          />
+        </div>
+        
       }
-      
     </div>
   )
 }
