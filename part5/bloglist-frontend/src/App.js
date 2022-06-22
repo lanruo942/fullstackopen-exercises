@@ -2,13 +2,13 @@
  * @Author: Summer Lee
  * @Date: 2022-06-17 03:13:07
  * @LastEditors: Summer Lee
- * @LastEditTime: 2022-06-18 03:38:13
+ * @LastEditTime: 2022-06-23 03:32:01
  */
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import LoginForm from './components/LoginForm'
+import BlogsList from './components/Blogs/List'
 import BlogsForm from './components/Blogs/Form'
-import BlogsCreate from './components/Blogs/Create'
-import Notification from './components/Notification'
+import Togglable from './components/Togglable'
 import blogService from './services/blogs'
 import loginService from './services/login'
 
@@ -22,6 +22,7 @@ const App = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
+  const blogFormRef = useRef()
 
   useEffect(() => {
     blogService
@@ -72,6 +73,7 @@ const App = () => {
   }
 
   const addBlog = event => {
+    blogFormRef.current.toggleVisibility()
     event.preventDefault()
 
     const newObject = {
@@ -95,16 +97,6 @@ const App = () => {
       })
   }
 
-  const handleUsernameChange = ({ target }) => setUsername(target.value)
-
-  const handlePasswordChange = ({ target }) => setPassword(target.value)
-  
-  const handleTitleChange = ({ target }) => setTitle(target.value)
-
-  const handleAuthorChange = ({ target }) => setAuthor(target.value)
-
-  const handleUrlChange = ({ target }) => setUrl(target.value)
-
   return (
     <div>      
       {user === null ?
@@ -112,30 +104,30 @@ const App = () => {
           handleLogin={handleLogin}
           username={username}
           password={password}
-          handleUsernameChange={handleUsernameChange}
-          handlePasswordChange={handlePasswordChange}
+          handleUsernameChange={({ target }) => setUsername(target.value)}
+          handlePasswordChange={({ target }) => setPassword(target.value)}
           message={message}
           messageStatus={messageStatus}
         /> :
-        <div>
-          <BlogsForm
-            user={user}
-            blogs={blogs}
-            handleLogout={handleLogout}
-            message={message}
-            messageStatus={messageStatus}
-          />
-          <BlogsCreate
-            title={title}  
-            author={author}
-            url={url}
-            addBlog={addBlog}
-            handleTitleChange={handleTitleChange}
-            handleAuthorChange={handleAuthorChange}
-            handleUrlChange={handleUrlChange}
-          />
-        </div>
-        
+        <BlogsList
+          user={user}
+          blogs={blogs}
+          handleLogout={handleLogout}
+          message={message}
+          messageStatus={messageStatus}
+        >
+          <Togglable buttonLabel="new blog" ref={blogFormRef}>
+            <BlogsForm
+              title={title}  
+              author={author}
+              url={url}
+              addBlog={addBlog}
+              handleTitleChange={({ target }) => setTitle(target.value)}
+              handleAuthorChange={({ target }) => setAuthor(target.value)}
+              handleUrlChange={({ target }) => setUrl(target.value)}
+            />
+          </Togglable>
+        </BlogsList>
       }
     </div>
   )
