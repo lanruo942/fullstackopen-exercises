@@ -2,14 +2,32 @@
  * @Author: Summer Lee
  * @Date: 2022-06-17 17:52:36
  * @LastEditors: Summer Lee
- * @LastEditTime: 2022-06-23 03:24:42
+ * @LastEditTime: 2022-06-23 03:40:30
  */
-import React from 'react'
+import React, { useState } from 'react'
 
-const BlogsForm = ({ title, author, url, addBlog, handleTitleChange, handleAuthorChange, handleUrlChange }) => {
+const BlogsForm = ({ createBlog }) => {
+  const [title, setTitle] = useState('')
+  const [author, setAuthor] = useState('')
+  const [url, setUrl] = useState('')
+
+	const addBlog = event => {
+		event.preventDefault()
+
+		createBlog({
+      title: title,
+      author: author,
+      url: url,
+    })
+
+		setTitle('')
+    setAuthor('')
+    setUrl('')
+	}
+
 	return (
 		<div>
-			<h2>Create new</h2>
+			<h2>Create a new blog</h2>
 			<form onSubmit={addBlog}>
 				<div>
 					<label htmlFor="Title">title: </label>
@@ -17,7 +35,7 @@ const BlogsForm = ({ title, author, url, addBlog, handleTitleChange, handleAutho
 						type="text"
 						value={title}
 						name="Title"
-						onChange={handleTitleChange}
+						onChange={({ target }) => setTitle(target.value)}
 					/>
 				</div>
 				<div>
@@ -26,7 +44,7 @@ const BlogsForm = ({ title, author, url, addBlog, handleTitleChange, handleAutho
 						type="text"
 						value={author}
 						name="Author"
-						onChange={handleAuthorChange}
+						onChange={({ target }) => setAuthor(target.value)}
 					/>
 				</div>
 				<div>
@@ -35,7 +53,7 @@ const BlogsForm = ({ title, author, url, addBlog, handleTitleChange, handleAutho
 						type="text"
 						value={url}
 						name="Url"
-						onChange={handleUrlChange}
+						onChange={({ target }) => setUrl(target.value)}
 					/>
 				</div>
 				<button type="submit">create</button>
