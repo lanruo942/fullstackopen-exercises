@@ -2,13 +2,13 @@
  * @Author: Summer Lee
  * @Date: 2022-06-17 03:13:07
  * @LastEditors: Summer Lee
- * @LastEditTime: 2022-06-23 04:09:36
+ * @LastEditTime: 2022-06-23 04:31:01
  */
 import React, { useState } from 'react'
 import './Blog.css'
 
 
-const Blog = ({blog}) => {
+const Blog = ({ blog, updateBlog }) => {
   const [visible, setVisible] = useState(false)
   const [buttonStatus, setButtonStatus] = useState('view')
 
@@ -25,7 +25,7 @@ const Blog = ({blog}) => {
       <button onClick={toggleVisibility}>{buttonStatus}</button>
       <div style={showWhenVisible}>
         <p>{blog.url}</p>
-        <p>likes {blog.likes} <button>like</button></p>
+        <p>likes {blog.likes} <button onClick={() => updateBlog(blog.id)}>like</button></p>
         <p>{blog.author}</p>
       </div>
     </div>

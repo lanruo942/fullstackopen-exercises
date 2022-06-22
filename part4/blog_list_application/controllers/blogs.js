@@ -2,7 +2,7 @@
  * @Author: Summer Lee
  * @Date: 2022-03-24 15:13:58
  * @LastEditors: Summer Lee
- * @LastEditTime: 2022-06-12 02:33:19
+ * @LastEditTime: 2022-06-23 05:23:28
  */
 const blogsRouter = require('express').Router()
 const Blog = require('../models/blog')
@@ -52,8 +52,13 @@ blogsRouter.delete('/:id', middleware.userExtractor, async (request, response) =
 
 blogsRouter.patch('/:id', async (request, response) => {
 	const blog = request.body
+	const blogInDb = await Blog.findById(request.params.id)
 
-	const updatedBlog = await Blog.findByIdAndUpdate(request.params.id, blog, { new: true })
+	if (!blogInDb) {
+		return response.status(404).json({ error: 'id invalid' })
+	}
+
+	const updatedBlog = await Blog.findByIdAndUpdate(request.params.id, blog, { new: true }).populate('user', { username: 1, name: 1, id: 1 })
 	response.json(updatedBlog)
 })
 

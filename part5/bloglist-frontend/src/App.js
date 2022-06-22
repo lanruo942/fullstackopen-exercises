@@ -2,7 +2,7 @@
  * @Author: Summer Lee
  * @Date: 2022-06-17 03:13:07
  * @LastEditors: Summer Lee
- * @LastEditTime: 2022-06-23 03:42:51
+ * @LastEditTime: 2022-06-23 05:24:32
  */
 import { useState, useEffect, useRef } from 'react'
 import LoginForm from './components/LoginForm'
@@ -84,6 +84,25 @@ const App = () => {
       })
   }
 
+  const updateBlog = id => {
+    const blog = blogs.find(blog => blog.id === id)
+    const changeBlog = { likes: blog.likes + 1 }
+
+    blogService
+      .update(id, changeBlog)
+      .then(updatedBlog => {
+        setBlogs(blogs.map(blog => blog.id !== id ? blog : updatedBlog))
+      })
+      .catch(error => {
+        setMessageStatus('error')
+        setMessage(`Blog '${blog.title}' was already removed from server.`)
+        setTimeout(() => {
+          setMessage(null)
+        }, 5000)
+        setBlogs(blogs.filter(blog => blog.id !== id))
+      })
+  }
+
   return (
     <div>      
       {user === null ?
@@ -99,6 +118,7 @@ const App = () => {
         <BlogsList
           user={user}
           blogs={blogs}
+          updateBlog={updateBlog}
           handleLogout={handleLogout}
           message={message}
           messageStatus={messageStatus}
