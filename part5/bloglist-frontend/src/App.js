@@ -2,7 +2,7 @@
  * @Author: Summer Lee
  * @Date: 2022-06-17 03:13:07
  * @LastEditors: Summer Lee
- * @LastEditTime: 2022-06-24 16:35:16
+ * @LastEditTime: 2022-06-24 18:08:48
  */
 import { useState, useEffect, useRef } from 'react'
 import LoginForm from './components/LoginForm'
@@ -11,7 +11,6 @@ import BlogsForm from './components/Blogs/Form'
 import Togglable from './components/Togglable'
 import blogService from './services/blogs'
 import loginService from './services/login'
-import _ from 'lodash'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -105,6 +104,46 @@ const App = () => {
       })
   }
 
+  const removeBlog = id => {
+    const blog = blogs.find(blog => blog.id === id)
+    const confirmInfo = `Remove blog ${blog.title} by ${blog.author}`
+
+    if (window.confirm(confirmInfo)) {
+      blogService
+      .remove(id)
+      .then(response => {
+        setBlogs(blogs.filter(blog => blog.id !== id))
+        setMessageStatus('success')
+        setMessage(`blog ${blog.title} by ${blog.author} removed`)
+        setTimeout(() => {
+          setMessage(null)
+        }, 5000)
+      })
+      .catch(error => {
+        const status = error.response.status
+
+        setMessageStatus('error')
+
+        if (status === 401) {
+          setMessage(`User Authentication failed.`)
+        }
+
+        if (status === 403) {
+          setMessage(`No permission.`)
+        }
+
+        if (status === 404) {
+          setMessage(`Blog '${blog.title}' was already removed from server.`)
+          setBlogs(blogs.filter(blog => blog.id !== id))
+        }
+
+        setTimeout(() => {
+          setMessage(null)
+        }, 5000)
+      })
+    }
+  }
+
   return (
     <div>      
       {user === null ?
@@ -121,6 +160,7 @@ const App = () => {
           user={user}
           blogs={blogs}
           updateBlog={updateBlog}
+          removeBlog={removeBlog}
           handleLogout={handleLogout}
           message={message}
           messageStatus={messageStatus}

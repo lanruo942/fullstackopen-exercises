@@ -2,7 +2,7 @@
  * @Author: Summer Lee
  * @Date: 2022-03-24 15:13:58
  * @LastEditors: Summer Lee
- * @LastEditTime: 2022-06-23 05:23:28
+ * @LastEditTime: 2022-06-24 18:25:22
  */
 const blogsRouter = require('express').Router()
 const Blog = require('../models/blog')
@@ -31,7 +31,9 @@ blogsRouter.post('/', middleware.userExtractor, async (request, response) => {
 		validateModifiedOnly: true
 	})
 
-	response.status(201).json(savedBlog)
+	const savedBlogFullUser = await savedBlog.populate('user', { username: 1, name: 1, id: 1 })
+
+	response.status(201).json(savedBlogFullUser)
 })
 
 blogsRouter.delete('/:id', middleware.userExtractor, async (request, response) => {
@@ -42,7 +44,7 @@ blogsRouter.delete('/:id', middleware.userExtractor, async (request, response) =
 		return response.status(404).json({ error: 'id invalid' })
 	}
 
-	if (blog.user.toString() !== user.id.toString()) {
+	if (!blog.user || (blog.user.toString() !== user.id.toString())) {
 		return response.status(403).end()
 	}
 
