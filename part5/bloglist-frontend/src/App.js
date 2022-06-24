@@ -2,7 +2,7 @@
  * @Author: Summer Lee
  * @Date: 2022-06-17 03:13:07
  * @LastEditors: Summer Lee
- * @LastEditTime: 2022-06-23 05:24:32
+ * @LastEditTime: 2022-06-24 16:35:16
  */
 import { useState, useEffect, useRef } from 'react'
 import LoginForm from './components/LoginForm'
@@ -11,6 +11,7 @@ import BlogsForm from './components/Blogs/Form'
 import Togglable from './components/Togglable'
 import blogService from './services/blogs'
 import loginService from './services/login'
+import _ from 'lodash'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -24,9 +25,10 @@ const App = () => {
   useEffect(() => {
     blogService
       .getAll()
-      .then(blogs =>
-        setBlogs(blogs)
-      )  
+      .then(blogs => {
+        // const orderBlogs = _.orderBy(blogs, 'likes', 'desc')
+        setBlogs(blogs.sort((prev, next) => next.likes - prev.likes))
+      })  
   }, [])
 
   useEffect(() => {
@@ -91,7 +93,7 @@ const App = () => {
     blogService
       .update(id, changeBlog)
       .then(updatedBlog => {
-        setBlogs(blogs.map(blog => blog.id !== id ? blog : updatedBlog))
+        setBlogs(blogs.map(blog => blog.id !== id ? blog : updatedBlog).sort((prev, next) => next.likes - prev.likes))
       })
       .catch(error => {
         setMessageStatus('error')
