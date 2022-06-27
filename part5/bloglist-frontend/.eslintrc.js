@@ -2,13 +2,13 @@
  * @Author: Summer Lee
  * @Date: 2022-06-25 14:35:44
  * @LastEditors: Summer Lee
- * @LastEditTime: 2022-06-26 18:53:56
+ * @LastEditTime: 2022-06-27 16:57:54
  */
 /* eslint-env node */
 module.exports = {
 	'env': {
 		'browser': true,
-		'es6': true,
+		'es2021': true,
 		'jest/globals': true
 	},
 	'extends': [
