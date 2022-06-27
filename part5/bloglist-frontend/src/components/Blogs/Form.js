@@ -2,27 +2,27 @@
  * @Author: Summer Lee
  * @Date: 2022-06-17 17:52:36
  * @LastEditors: Summer Lee
- * @LastEditTime: 2022-06-23 03:40:30
+ * @LastEditTime: 2022-06-27 16:20:45
  */
 import React, { useState } from 'react'
 
 const BlogsForm = ({ createBlog }) => {
-  const [title, setTitle] = useState('')
-  const [author, setAuthor] = useState('')
-  const [url, setUrl] = useState('')
+	const [title, setTitle] = useState('')
+	const [author, setAuthor] = useState('')
+	const [url, setUrl] = useState('')
 
 	const addBlog = event => {
 		event.preventDefault()
 
 		createBlog({
-      title: title,
-      author: author,
-      url: url,
-    })
+			title: title,
+			author: author,
+			url: url,
+		})
 
 		setTitle('')
-    setAuthor('')
-    setUrl('')
+		setAuthor('')
+		setUrl('')
 	}
 
 	return (
