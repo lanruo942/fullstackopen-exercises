@@ -2,7 +2,7 @@
  * @Author: Summer Lee
  * @Date: 2022-06-30 01:44:31
  * @LastEditors: Summer Lee
- * @LastEditTime: 2022-06-30 02:51:37
+ * @LastEditTime: 2022-06-30 03:01:20
  */
 import React from 'react'
 import '@testing-library/jest-dom/extend-expect'
@@ -36,5 +36,23 @@ describe('<Blog />', () => {
 		expect(titleElement).toBeDefined()
 		expect(authorElement).toBeDefined()
 		expect(blogInfoDiv).toHaveStyle('display: none')
+	})
+
+	test('clicking the view button, show blog-info', async () => {
+		const blog = {
+			title: 'test blog',
+			author: 'test author',
+			url: 'test url',
+			likes: 0
+		}
+
+		const { container } = render(<Blog blog={blog} />)
+
+		const user = userEvent.setup()
+		const button = screen.getByText('view')
+		await user.click(button)
+
+		const blogInfoDiv = container.querySelector('.blog-info')
+		expect(blogInfoDiv).not.toHaveStyle('display: none')
 	})
 })
