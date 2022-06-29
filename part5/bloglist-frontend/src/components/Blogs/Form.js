@@ -2,7 +2,7 @@
  * @Author: Summer Lee
  * @Date: 2022-06-17 17:52:36
  * @LastEditors: Summer Lee
- * @LastEditTime: 2022-06-27 16:20:45
+ * @LastEditTime: 2022-06-30 03:36:18
  */
 import React, { useState } from 'react'
 
@@ -32,6 +32,7 @@ const BlogsForm = ({ createBlog }) => {
 				<div>
 					<label htmlFor="Title">title: </label>
 					<input
+						id="blog-title"
 						type="text"
 						value={title}
 						name="Title"
@@ -41,6 +42,7 @@ const BlogsForm = ({ createBlog }) => {
 				<div>
 					<label htmlFor="Author">author: </label>
 					<input
+						id="blog-author"
 						type="text"
 						value={author}
 						name="Author"
@@ -50,6 +52,7 @@ const BlogsForm = ({ createBlog }) => {
 				<div>
 					<label htmlFor="Url">url: </label>
 					<input
+						id="blog-url"
 						type="text"
 						value={url}
 						name="Url"

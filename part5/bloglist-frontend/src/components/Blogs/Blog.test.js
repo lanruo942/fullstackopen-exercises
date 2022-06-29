@@ -11,14 +11,6 @@ import userEvent from '@testing-library/user-event'
 import Blog from './Blog'
 
 describe('<Blog />', () => {
-	// let container
-
-	// beforeEach(() => {
-	// 	container = render(
-	// 		<Blog />
-	// 	).container
-	// })
-
 	test('by default, show title and author, hide url and likes', () => {
 		const blog = {
 			title: 'test blog',
