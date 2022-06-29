@@ -2,7 +2,7 @@
  * @Author: Summer Lee
  * @Date: 2022-06-30 01:44:31
  * @LastEditors: Summer Lee
- * @LastEditTime: 2022-06-30 03:01:20
+ * @LastEditTime: 2022-06-30 03:15:37
  */
 import React from 'react'
 import '@testing-library/jest-dom/extend-expect'
@@ -38,7 +38,7 @@ describe('<Blog />', () => {
 		expect(blogInfoDiv).toHaveStyle('display: none')
 	})
 
-	test('clicking the view button, show blog-info', async () => {
+	test('after clicking the view button, blog-info is displayed', async () => {
 		const blog = {
 			title: 'test blog',
 			author: 'test author',
@@ -54,5 +54,25 @@ describe('<Blog />', () => {
 
 		const blogInfoDiv = container.querySelector('.blog-info')
 		expect(blogInfoDiv).not.toHaveStyle('display: none')
+	})
+
+	test('after click the likes button twice, calls event handler twice', async () => {
+		const blog = {
+			title: 'test blog',
+			author: 'test author',
+			url: 'test url',
+			likes: 0
+		}
+
+		const mockHandler = jest.fn()
+
+		const { container } = render(<Blog blog={blog} updateBlog={mockHandler} />)
+
+		const user = userEvent.setup()
+		const button = screen.getByText('like')
+		await user.dblClick(button)
+
+		// expect(mockHandler.mock.calls).toHaveLength(2)
+		expect(mockHandler).toHaveBeenCalledTimes(2)
 	})
 })
