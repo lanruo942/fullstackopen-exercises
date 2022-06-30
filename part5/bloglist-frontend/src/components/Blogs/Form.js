@@ -2,7 +2,7 @@
  * @Author: Summer Lee
  * @Date: 2022-06-17 17:52:36
  * @LastEditors: Summer Lee
- * @LastEditTime: 2022-06-30 03:36:18
+ * @LastEditTime: 2022-07-01 03:32:08
  */
 import React, { useState } from 'react'
 
@@ -59,7 +59,7 @@ const BlogsForm = ({ createBlog }) => {
 						onChange={({ target }) => setUrl(target.value)}
 					/>
 				</div>
-				<button type="submit">create</button>
+				<button id="create-button" type="submit">create</button>
 			</form>
 		</div>
 	)

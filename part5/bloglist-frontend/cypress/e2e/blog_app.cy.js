@@ -2,7 +2,7 @@
  * @Author: Summer Lee
  * @Date: 2022-07-01 02:51:01
  * @LastEditors: Summer Lee
- * @LastEditTime: 2022-07-01 03:27:17
+ * @LastEditTime: 2022-07-01 03:37:09
  */
 describe('Blog app', function () {
 	beforeEach(function () {
@@ -40,6 +40,21 @@ describe('Blog app', function () {
 				.and('have.css', 'color', 'rgb(255, 0, 0)')
 
 			cy.get('html').should('not.contain', 'Matti Luukkainen logged-in')
+		})
+	})
+
+	describe('When logged in', function () {
+		beforeEach(function () {
+			cy.login({ username: 'mluukkai', password: 'salainen' })
+		})
+
+		it('A blog can be created', function () {
+			cy.contains('new blog').click()
+			cy.get('#blog-title').type('a blog created by cypress')
+			cy.get('#blog-author').type('Cypress')
+			cy.get('#blog-url').type('https://google.com')
+			cy.get('#create-button').click()
+			cy.contains('a blog created by cypress')
 		})
 	})
 })
