@@ -2,7 +2,7 @@
  * @Author: Summer Lee
  * @Date: 2022-06-17 16:45:09
  * @LastEditors: Summer Lee
- * @LastEditTime: 2022-07-01 03:05:00
+ * @LastEditTime: 2022-07-01 03:26:27
  */
 import React from 'react'
 import Notification from './Notification'
@@ -17,6 +17,7 @@ const LoginForm = ({ handleLogin, username, password, handleUsernameChange, hand
 			<div>
 				<label htmlFor="Username">username</label>
 				<input
+					id="username"
 					type="text"
 					value={username}
 					name="Username"
@@ -26,6 +27,7 @@ const LoginForm = ({ handleLogin, username, password, handleUsernameChange, hand
 			<div>
 				<label htmlFor="Password">password</label>
 				<input
+					id="password"
 					type="password"
 					value={password}
 					name="Password"
