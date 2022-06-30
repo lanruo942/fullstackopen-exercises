@@ -2,14 +2,15 @@
  * @Author: Summer Lee
  * @Date: 2022-06-25 14:35:44
  * @LastEditors: Summer Lee
- * @LastEditTime: 2022-06-27 16:57:54
+ * @LastEditTime: 2022-07-01 02:39:27
  */
 /* eslint-env node */
 module.exports = {
 	'env': {
 		'browser': true,
 		'es2021': true,
-		'jest/globals': true
+		'jest/globals': true,
+		'cypress/globals': true
 	},
 	'extends': [
 		'eslint:recommended',
@@ -23,7 +24,7 @@ module.exports = {
 		'sourceType': 'module'
 	},
 	'plugins': [
-		'react', 'jest'
+		'react', 'jest', 'cypress'
 	],
 	'rules': {
 		'indent': [
