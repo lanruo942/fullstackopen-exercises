@@ -2,7 +2,7 @@
  * @Author: Summer Lee
  * @Date: 2022-07-01 02:51:01
  * @LastEditors: Summer Lee
- * @LastEditTime: 2022-07-01 09:04:30
+ * @LastEditTime: 2022-07-01 09:52:35
  */
 describe('Blog app', function () {
 	beforeEach(function () {
@@ -79,6 +79,19 @@ describe('Blog app', function () {
 					.parent()
 					.should('contain', 'likes 1')
 			})
+
+			it('it can be remove', function () {
+				cy.contains('another blog cypress')
+					.find('.visible-button')
+					.click()
+
+				cy.contains('another blog cypress')
+					.find('.remove-button')
+					.click()
+
+				cy.contains('blog another blog cypress by Cypress removed')
+					.should('have.css', 'color', 'rgb(0, 128, 0)')
+			})
 		})
 
 		describe('and several blogs exist', function () {
@@ -102,6 +115,52 @@ describe('Blog app', function () {
 					.parent()
 					.should('contain', 'likes 1')
 			})
+
+			it('one of those can be remove', function () {
+				cy.contains('second blog')
+					.find('.visible-button')
+					.click()
+
+				cy.contains('second blog')
+					.find('.remove-button')
+					.click()
+
+				cy.contains('blog second blog by Cypress removed')
+					.should('have.css', 'color', 'rgb(0, 128, 0)')
+			})
+		})
+	})
+
+	describe('When another user login', function () {
+		beforeEach(function () {
+			cy.login({ username: 'mluukkai', password: 'salainen' })
+			cy.createBlog({
+				title: 'another blog cypress',
+				author: 'Cypress',
+				url: 'https://google.com'
+			})
+			cy.contains('logout').click()
+
+			const newUser = {
+				name: 'Administrator',
+				username: 'root',
+				password: 'salainen'
+			}
+
+			cy.request('POST', 'http://localhost:3001/api/users/', newUser)
+			cy.login({ username: 'root', password: 'salainen' })
+		})
+
+		it.only('the other users cannot delete the blog', function () {
+			cy.contains('another blog cypress')
+				.find('.remove-button')
+				.should('have.css', 'display', 'none')
+				.click({ force: true })
+
+			cy.contains('No permission')
+				.should('have.css', 'color', 'rgb(255, 0, 0)')
+
+			cy.contains('another blog cypress')
 		})
 	})
 })
