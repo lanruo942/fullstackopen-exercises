@@ -2,7 +2,7 @@
  * @Author: Summer Lee
  * @Date: 2022-07-01 02:51:01
  * @LastEditors: Summer Lee
- * @LastEditTime: 2022-07-01 03:37:09
+ * @LastEditTime: 2022-07-01 09:04:30
  */
 describe('Blog app', function () {
 	beforeEach(function () {
@@ -55,6 +55,53 @@ describe('Blog app', function () {
 			cy.get('#blog-url').type('https://google.com')
 			cy.get('#create-button').click()
 			cy.contains('a blog created by cypress')
+		})
+
+		describe('and a blog exists', function () {
+			beforeEach(function () {
+				cy.createBlog({
+					title: 'another blog cypress',
+					author: 'Cypress',
+					url: 'https://google.com'
+				})
+			})
+
+			it('it can be likes', function () {
+				cy.contains('another blog cypress')
+					.find('.visible-button')
+					.click()
+
+				cy.contains('another blog cypress')
+					.find('.like-button')
+					.click()
+
+				cy.get('.like-button')
+					.parent()
+					.should('contain', 'likes 1')
+			})
+		})
+
+		describe('and several blogs exist', function () {
+			beforeEach(function () {
+				cy.createBlog({ title: 'first blog', author: 'Cypress', url: '/' })
+				cy.createBlog({ title: 'second blog', author: 'Cypress', url: '/' })
+				cy.createBlog({ title: 'third blog', author: 'Cypress', url: '/' })
+			})
+
+			it('one of those can be likes', function () {
+				cy.contains('second blog')
+					.find('.visible-button')
+					.click()
+
+				cy.contains('second blog')
+					.find('.like-button')
+					.click()
+
+				cy.contains('second blog')
+					.find('.like-button')
+					.parent()
+					.should('contain', 'likes 1')
+			})
 		})
 	})
 })

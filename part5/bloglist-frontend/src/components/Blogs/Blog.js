@@ -2,7 +2,7 @@
  * @Author: Summer Lee
  * @Date: 2022-06-17 03:13:07
  * @LastEditors: Summer Lee
- * @LastEditTime: 2022-06-30 01:47:51
+ * @LastEditTime: 2022-07-01 08:57:22
  */
 import React, { useState } from 'react'
 import './Blog.css'
@@ -23,11 +23,11 @@ const Blog = ({ username, blog, updateBlog, removeBlog }) => {
 	return (
 		<div className="blog-style">
 			{blog.title}&nbsp;{blog.author}&nbsp;
-			<button onClick={toggleVisibility}>{buttonStatus}</button>
+			<button className="visible-button" onClick={toggleVisibility}>{buttonStatus}</button>
 			<div style={showWhenVisible} className="blog-info">
 				<p>{blog.url}</p>
-				<p>likes {blog.likes} <button onClick={() => updateBlog(blog.id)}>like</button></p>
-				<button style={buttonVisible} onClick={() => removeBlog(blog.id)}>remove</button>
+				<p>likes {blog.likes} <button className="like-button" onClick={() => updateBlog(blog.id)}>like</button></p>
+				<button className="remove-button" style={buttonVisible} onClick={() => removeBlog(blog.id)}>remove</button>
 			</div>
 		</div>
 	)
