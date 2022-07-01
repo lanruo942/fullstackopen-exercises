@@ -2,7 +2,7 @@
  * @Author: Summer Lee
  * @Date: 2022-07-01 02:51:01
  * @LastEditors: Summer Lee
- * @LastEditTime: 2022-07-01 09:52:35
+ * @LastEditTime: 2022-07-01 17:28:30
  */
 describe('Blog app', function () {
 	beforeEach(function () {
@@ -129,6 +129,20 @@ describe('Blog app', function () {
 					.should('have.css', 'color', 'rgb(0, 128, 0)')
 			})
 		})
+
+		describe('and several blogs with likes exist', function () {
+			beforeEach(function () {
+				cy.createBlog({ title: 'The title with the most likes', author: 'Cypress', url: '/', likes: 10 })
+				cy.createBlog({ title: 'The title with the second most likes', author: 'Cypress', url: '/', likes: 5 })
+				cy.createBlog({ title: 'The title with the third most likes', author: 'Cypress', url: '/', likes: 1 })
+			})
+
+			it('Blogs are sorted by numbers of likes in descending order', function () {
+				cy.get('.blog').eq(0).should('contain', 'The title with the most likes')
+				cy.get('.blog').eq(1).should('contain', 'The title with the second most likes')
+				cy.get('.blog').eq(2).should('contain', 'The title with the third most likes')
+			})
+		})
 	})
 
 	describe('When another user login', function () {
@@ -151,7 +165,7 @@ describe('Blog app', function () {
 			cy.login({ username: 'root', password: 'salainen' })
 		})
 
-		it.only('the other users cannot delete the blog', function () {
+		it('the other users cannot delete the blog', function () {
 			cy.contains('another blog cypress')
 				.find('.remove-button')
 				.should('have.css', 'display', 'none')

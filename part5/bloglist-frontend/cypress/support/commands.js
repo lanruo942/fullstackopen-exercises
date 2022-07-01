@@ -2,7 +2,7 @@
  * @Author: Summer Lee
  * @Date: 2022-07-01 02:50:14
  * @LastEditors: Summer Lee
- * @LastEditTime: 2022-07-01 08:51:27
+ * @LastEditTime: 2022-07-01 17:27:44
  */
 Cypress.Commands.add('login', ({ username, password }) => {
 	cy.request('POST', 'http://localhost:3001/api/login', {
@@ -14,11 +14,11 @@ Cypress.Commands.add('login', ({ username, password }) => {
 	})
 })
 
-Cypress.Commands.add('createBlog', ({ title, author, url }) => {
+Cypress.Commands.add('createBlog', ({ title, author, url, likes }) => {
 	cy.request({
 		url: 'http://localhost:3001/api/blogs',
 		method: 'POST',
-		body: { title, author, url },
+		body: { title, author, url, likes },
 		headers: {
 			'Authorization': `bearer ${JSON.parse(localStorage.getItem('loggedBlogappUser')).token}`
 		}

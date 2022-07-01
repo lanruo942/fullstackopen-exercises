@@ -2,7 +2,7 @@
  * @Author: Summer Lee
  * @Date: 2022-06-17 03:13:07
  * @LastEditors: Summer Lee
- * @LastEditTime: 2022-07-01 08:57:22
+ * @LastEditTime: 2022-07-01 17:24:05
  */
 import React, { useState } from 'react'
 import './Blog.css'
@@ -21,7 +21,7 @@ const Blog = ({ username, blog, updateBlog, removeBlog }) => {
 	}
 
 	return (
-		<div className="blog-style">
+		<div className="blog">
 			{blog.title}&nbsp;{blog.author}&nbsp;
 			<button className="visible-button" onClick={toggleVisibility}>{buttonStatus}</button>
 			<div style={showWhenVisible} className="blog-info">
