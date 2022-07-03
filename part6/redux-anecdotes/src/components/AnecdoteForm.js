@@ -2,12 +2,12 @@
  * @Author: Summer Lee
  * @Date: 2022-07-04 02:49:01
  * @LastEditors: Summer Lee
- * @LastEditTime: 2022-07-04 02:58:18
+ * @LastEditTime: 2022-07-04 03:04:50
  */
 import { useDispatch } from 'react-redux'
 import { createAnecdote } from '../reducers/anecdoteReducer'
 
-const NewAnecdotes = () => {
+const AnecdoteForm = () => {
 	const dispatch = useDispatch()
 
 	const addAnecdote = (event) => {
@@ -25,4 +25,4 @@ const NewAnecdotes = () => {
 	)
 }
 
-export default NewAnecdotes
+export default AnecdoteForm
