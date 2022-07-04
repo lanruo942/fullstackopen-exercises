@@ -2,7 +2,7 @@
  * @Author: Summer Lee
  * @Date: 2022-07-04 03:06:25
  * @LastEditors: Summer Lee
- * @LastEditTime: 2022-07-04 03:15:08
+ * @LastEditTime: 2022-07-05 01:39:59
  */
 import { useSelector, useDispatch } from 'react-redux'
 import { vote } from '../reducers/anecdoteReducer'
@@ -31,7 +31,7 @@ const AnecdoteList = () => {
 				<Anecdote
 					key={anecdote.id}
 					anecdote={anecdote}
-					handleClick={() => dispatch(vote(anecdote))}
+					handleClick={() => dispatch(vote(anecdote.id))}
 				/>
 			)}
 		</div>
