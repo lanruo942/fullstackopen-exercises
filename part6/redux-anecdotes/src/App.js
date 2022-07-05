@@ -2,7 +2,7 @@
  * @Author: Summer Lee
  * @Date: 2022-07-04 02:02:37
  * @LastEditors: Summer Lee
- * @LastEditTime: 2022-07-06 00:55:54
+ * @LastEditTime: 2022-07-06 01:03:28
  */
 import { useEffect } from 'react'
 import AnecdoteList from './components/AnecdoteList'
@@ -20,7 +20,7 @@ const App = () => {
 		anecdoteService
 			.getAll()
 			.then(anecdotes => dispatch(setAnecdotes(anecdotes)))
-	}, [])
+	}, [dispatch])
 
 	return (
 		<div>
