@@ -2,16 +2,14 @@
  * @Author: Summer Lee
  * @Date: 2022-07-05 17:17:39
  * @LastEditors: Summer Lee
- * @LastEditTime: 2022-07-05 17:27:45
+ * @LastEditTime: 2022-07-07 02:20:38
  */
-import { useDispatch } from 'react-redux'
+import { connect } from 'react-redux'
 import { filterChange } from '../reducers/filterReducer'
 
-const Filter = () => {
-	const dispatch = useDispatch()
-
+const Filter = (props) => {
 	const handleChange = (event) => {
-		dispatch(filterChange(event.target.value))
+		props.filterChange(event.target.value)
 	}
 
 	const style = {
@@ -25,4 +23,8 @@ const Filter = () => {
 	)
 }
 
-export default Filter
+const mapDispatchToProps = {
+	filterChange
+}
+
+export default connect(null, mapDispatchToProps)(Filter)
