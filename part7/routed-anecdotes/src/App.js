@@ -75,7 +75,6 @@ const CreateNew = (props) => {
 	const info = useField('text')
 	const navigate = useNavigate()
 
-
 	const handleSubmit = (e) => {
 		e.preventDefault()
 		props.addNew({
