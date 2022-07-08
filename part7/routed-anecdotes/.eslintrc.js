@@ -2,7 +2,7 @@
  * @Author: Summer Lee
  * @Date: 2022-07-08 15:59:19
  * @LastEditors: Summer Lee
- * @LastEditTime: 2022-07-08 16:05:56
+ * @LastEditTime: 2022-07-08 18:19:06
  */
 module.exports = {
 	'env': {
@@ -12,7 +12,8 @@ module.exports = {
 	},
 	'extends': [
 		'eslint:recommended',
-		'plugin:react/recommended'
+		'plugin:react/recommended',
+		'plugin:react-hooks/recommended'
 	],
 	'parserOptions': {
 		'ecmaFeatures': {
