@@ -2,7 +2,7 @@
  * @Author: Summer Lee
  * @Date: 2022-07-08 23:48:45
  * @LastEditors: Summer Lee
- * @LastEditTime: 2022-07-08 23:50:08
+ * @LastEditTime: 2022-07-09 00:06:49
  */
 import { useState } from 'react'
 
@@ -13,9 +13,14 @@ export const useField = (type) => {
 		setValue(event.target.value)
 	}
 
+	const reset = () => {
+		setValue('')
+	}
+
 	return {
 		type,
 		value,
-		onChange
+		onChange,
+		reset
 	}
 }
