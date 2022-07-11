@@ -1,0 +1,7 @@
+node_modules
+build
+public
+.vscode
+.eslintrc.js
+cypress.config.js
+.prettierrc.json
