@@ -2,11 +2,12 @@
  * @Author: Summer Lee
  * @Date: 2022-06-17 16:45:21
  * @LastEditors: Summer Lee
- * @LastEditTime: 2022-06-27 16:20:50
+ * @LastEditTime: 2022-07-11 22:12:28
  */
 import React from 'react'
 import Blog from './Blog'
 import Notification from '../Notification'
+import { useSelector } from 'react-redux'
 
 const BlogsList = ({
 	user,
@@ -14,32 +15,35 @@ const BlogsList = ({
 	updateBlog,
 	removeBlog,
 	handleLogout,
-	message,
-	messageStatus,
 	children,
-}) => (
-	<div>
-		<h2>blogs</h2>
+}) => {
+	const message = useSelector((state) => state.message)
+	const messageStatus = useSelector((state) => state.messageStatus)
 
-		<Notification message={message} messageStatus={messageStatus} />
+	return (
+		<div>
+			<h2>blogs</h2>
 
-		<p>
-			{user.name} logged-in
-			<button onClick={handleLogout}>logout</button>
-		</p>
+			<Notification message={message} messageStatus={messageStatus} />
 
-		{children}
+			<p>
+				{user.name} logged-in
+				<button onClick={handleLogout}>logout</button>
+			</p>
 
-		{blogs.map((blog) => (
-			<Blog
-				key={blog.id}
-				username={user.username}
-				blog={blog}
-				updateBlog={updateBlog}
-				removeBlog={removeBlog}
-			/>
-		))}
-	</div>
-)
+			{children}
+
+			{blogs.map((blog) => (
+				<Blog
+					key={blog.id}
+					username={user.username}
+					blog={blog}
+					updateBlog={updateBlog}
+					removeBlog={removeBlog}
+				/>
+			))}
+		</div>
+	)
+}
 
 export default BlogsList
