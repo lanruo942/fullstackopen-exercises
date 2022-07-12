@@ -2,23 +2,28 @@
  * @Author: Summer Lee
  * @Date: 2022-06-17 17:52:36
  * @LastEditors: Summer Lee
- * @LastEditTime: 2022-07-01 03:32:08
+ * @LastEditTime: 2022-07-12 02:29:14
  */
 import React, { useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { createBlog } from '../../reducers/blogReducer'
 
-const BlogsForm = ({ createBlog }) => {
+const BlogsForm = () => {
 	const [title, setTitle] = useState('')
 	const [author, setAuthor] = useState('')
 	const [url, setUrl] = useState('')
+	const dispatch = useDispatch()
 
 	const addBlog = (event) => {
 		event.preventDefault()
 
-		createBlog({
-			title: title,
-			author: author,
-			url: url,
-		})
+		dispatch(
+			createBlog({
+				title: title,
+				author: author,
+				url: url,
+			})
+		)
 
 		setTitle('')
 		setAuthor('')

@@ -2,14 +2,17 @@
  * @Author: Summer Lee
  * @Date: 2022-06-17 03:13:07
  * @LastEditors: Summer Lee
- * @LastEditTime: 2022-07-01 17:24:05
+ * @LastEditTime: 2022-07-12 02:42:50
  */
 import React, { useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { likesBlog, deleteBlog } from '../../reducers/blogReducer'
 import './Blog.css'
 
-const Blog = ({ username, blog, updateBlog, removeBlog }) => {
+const Blog = ({ username, blog }) => {
 	const [visible, setVisible] = useState(false)
 	const [buttonStatus, setButtonStatus] = useState('view')
+	const dispatch = useDispatch()
 
 	const showWhenVisible = { display: visible ? '' : 'none' }
 	const buttonVisible = {
@@ -31,14 +34,17 @@ const Blog = ({ username, blog, updateBlog, removeBlog }) => {
 				<p>{blog.url}</p>
 				<p>
 					likes {blog.likes}{' '}
-					<button className="like-button" onClick={() => updateBlog(blog.id)}>
+					<button
+						className="like-button"
+						onClick={() => dispatch(likesBlog(blog))}
+					>
 						like
 					</button>
 				</p>
 				<button
 					className="remove-button"
 					style={buttonVisible}
-					onClick={() => removeBlog(blog.id)}
+					onClick={() => dispatch(deleteBlog(blog.id))}
 				>
 					remove
 				</button>
