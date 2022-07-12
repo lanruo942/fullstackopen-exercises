@@ -2,7 +2,7 @@
  * @Author: Summer Lee
  * @Date: 2022-06-17 16:45:09
  * @LastEditors: Summer Lee
- * @LastEditTime: 2022-07-12 11:19:56
+ * @LastEditTime: 2022-07-12 17:09:04
  */
 import React, { useState } from 'react'
 import Notification from './Notification'
@@ -11,10 +11,12 @@ import blogService from '../services/blogs'
 import { useDispatch } from 'react-redux'
 import { setUser } from '../reducers/userReducer'
 import { setMessage } from '../reducers/messageReducer'
+import { useNavigate } from 'react-router-dom'
 
 const LoginForm = () => {
 	const [username, setUsername] = useState('')
 	const [password, setPassword] = useState('')
+	const navigate = useNavigate()
 	const dispatch = useDispatch()
 
 	const handleLogin = async (event) => {
@@ -31,6 +33,7 @@ const LoginForm = () => {
 			dispatch(setUser(user))
 			setUsername('')
 			setPassword('')
+			navigate('/')
 		} catch (exception) {
 			dispatch(setMessage('wrong username or password', 'error'))
 		}

@@ -2,22 +2,26 @@
  * @Author: Summer Lee
  * @Date: 2022-06-17 03:13:07
  * @LastEditors: Summer Lee
- * @LastEditTime: 2022-07-12 11:45:21
+ * @LastEditTime: 2022-07-13 01:24:45
  */
 import { useEffect, useRef } from 'react'
 import LoginForm from './components/LoginForm'
 import BlogsList from './components/Blogs/List'
 import BlogsForm from './components/Blogs/Form'
 import Togglable from './components/Togglable'
+import Header from './components/Header'
 import Users from './components/Users'
+import User from './components/User'
 import blogService from './services/blogs'
 import { useSelector, useDispatch } from 'react-redux'
 import { initializeBlogs } from './reducers/blogReducer'
 import { initializeUsersInfo } from './reducers/usersInfoReducer'
 import { setUser } from './reducers/userReducer'
+import { Routes, Route, Link, Navigate, useMatch } from 'react-router-dom'
 
 const App = () => {
-	const user = useSelector((state) => state.user)
+	const loginUser = useSelector((state) => state.user)
+	const users = useSelector((state) => state.users)
 	const blogFormRef = useRef()
 	const dispatch = useDispatch()
 
@@ -36,18 +40,45 @@ const App = () => {
 		}
 	}, [])
 
+	const match = useMatch('/users/:id')
+	const user = match ? users.find((u) => u.id === match.params.id) : null
+
 	return (
 		<div>
-			{user === null ? (
-				<LoginForm />
-			) : (
-				<BlogsList user={user}>
-					<Users />
-					<Togglable buttonLabel="new blog" ref={blogFormRef}>
-						<BlogsForm />
-					</Togglable>
-				</BlogsList>
-			)}
+			<Routes>
+				<Route
+					path="/"
+					element={
+						loginUser ? (
+							<Navigate replace to="/blogs" />
+						) : (
+							<Navigate replace to="/login" />
+						)
+					}
+				/>
+				<Route
+					path="/blogs"
+					element={
+						<BlogsList>
+							<Header />
+							<Togglable buttonLabel="new blog" ref={blogFormRef}>
+								<BlogsForm />
+							</Togglable>
+						</BlogsList>
+					}
+				/>
+				<Route
+					path="/users"
+					element={
+						<div>
+							<Header title="Users" />
+							<Users />
+						</div>
+					}
+				/>
+				<Route path="/users/:id" element={<User user={user} />} />
+				<Route path="/login" element={<LoginForm />} />
+			</Routes>
 		</div>
 	)
 }

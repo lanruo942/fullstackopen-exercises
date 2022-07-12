@@ -2,16 +2,17 @@
  * @Author: Summer Lee
  * @Date: 2022-06-17 03:13:07
  * @LastEditors: Summer Lee
- * @LastEditTime: 2022-07-12 10:44:03
+ * @LastEditTime: 2022-07-12 17:23:55
  */
 import React, { useState } from 'react'
-import { useDispatch } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { likesBlog, deleteBlog } from '../../reducers/blogReducer'
 import './Blog.css'
 
-const Blog = ({ username, blog }) => {
+const Blog = ({ blog }) => {
 	const [visible, setVisible] = useState(false)
 	const [buttonStatus, setButtonStatus] = useState('view')
+	const username = useSelector((state) => state.user.username)
 	const dispatch = useDispatch()
 
 	const showWhenVisible = { display: visible ? '' : 'none' }
