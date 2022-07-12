@@ -2,23 +2,30 @@
  * @Author: Summer Lee
  * @Date: 2022-06-17 16:45:21
  * @LastEditors: Summer Lee
- * @LastEditTime: 2022-07-12 02:51:21
+ * @LastEditTime: 2022-07-12 11:20:42
  */
 import React from 'react'
 import Blog from './Blog'
 import Notification from '../Notification'
-import { useSelector } from 'react-redux'
+import blogService from '../../services/blogs'
+import { useSelector, useDispatch } from 'react-redux'
+import { setUser } from '../../reducers/userReducer'
 
-const BlogsList = ({ user, handleLogout, children }) => {
-	const message = useSelector((state) => state.message)
-	const messageStatus = useSelector((state) => state.messageStatus)
+const BlogsList = ({ user, children }) => {
 	const blogs = useSelector((state) => state.blogs)
+	const dispatch = useDispatch()
+
+	const handleLogout = () => {
+		window.localStorage.removeItem('loggedBlogappUser')
+		blogService.setToken(null)
+		dispatch(setUser(null))
+	}
 
 	return (
 		<div>
 			<h2>blogs</h2>
 
-			<Notification message={message} messageStatus={messageStatus} />
+			<Notification />
 
 			<p>
 				{user.name} logged-in

@@ -2,7 +2,7 @@
  * @Author: Summer Lee
  * @Date: 2022-06-17 03:13:07
  * @LastEditors: Summer Lee
- * @LastEditTime: 2022-07-12 02:42:50
+ * @LastEditTime: 2022-07-12 10:44:03
  */
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
@@ -44,7 +44,7 @@ const Blog = ({ username, blog }) => {
 				<button
 					className="remove-button"
 					style={buttonVisible}
-					onClick={() => dispatch(deleteBlog(blog.id))}
+					onClick={() => dispatch(deleteBlog(blog))}
 				>
 					remove
 				</button>

@@ -2,7 +2,7 @@
  * @Author: Summer Lee
  * @Date: 2022-07-12 00:57:42
  * @LastEditors: Summer Lee
- * @LastEditTime: 2022-07-12 03:30:20
+ * @LastEditTime: 2022-07-12 10:53:52
  */
 import { createSlice } from '@reduxjs/toolkit'
 import blogService from '../services/blogs'
@@ -37,7 +37,7 @@ export const initializeBlogs = () => {
 			const blogs = await blogService.getAll()
 			dispatch(setBlogs(blogs.sort((prev, next) => next.likes - prev.likes)))
 		} catch (error) {
-			console.log(error)
+			dispatch(setMessage(error.message, 'error'))
 		}
 	}
 }
@@ -54,23 +54,61 @@ export const createBlog = (blog) => {
 				)
 			)
 		} catch (error) {
-			dispatch(setMessage('add failed', 'error'))
+			console.log(error)
+			dispatch(setMessage(error.message, 'error'))
 		}
 	}
 }
 
 export const likesBlog = (blog) => {
 	return async (dispatch) => {
-		const updateValue = { likes: blog.likes + 1 }
-		const updatedBlog = await blogService.update(blog.id, updateValue)
-		dispatch(updateBlog(updatedBlog))
+		try {
+			const updateValue = { likes: blog.likes + 1 }
+			const updatedBlog = await blogService.update(blog.id, updateValue)
+			dispatch(updateBlog(updatedBlog))
+		} catch (error) {
+			dispatch(
+				setMessage(
+					`Blog '${blog.title}' was already removed from server`,
+					'error'
+				)
+			)
+		}
 	}
 }
 
-export const deleteBlog = (id) => {
+export const deleteBlog = (blog) => {
 	return async (dispatch) => {
-		await blogService.remove(id)
-		dispatch(removeBlog(id))
+		try {
+			await blogService.remove(blog.id)
+			dispatch(removeBlog(blog.id))
+			dispatch(
+				setMessage(
+					`Blog '${blog.title}' by ${blog.author} was removed`,
+					'success'
+				)
+			)
+		} catch (error) {
+			const status = error.response.status
+			let message = ''
+
+			switch (status) {
+				case 401:
+					message = 'Your certification has expired. Please log in again.'
+					break
+				case 403:
+					message = 'You are not authorized to delete this blog.'
+					break
+				case 404:
+					message = `Blog '${blog.title}' was already removed from server.`
+					dispatch(removeBlog(blog.id))
+					break
+				default:
+					message = error.message
+			}
+
+			dispatch(setMessage(message, 'error'))
+		}
 	}
 }
 

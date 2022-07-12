@@ -2,27 +2,45 @@
  * @Author: Summer Lee
  * @Date: 2022-06-17 16:45:09
  * @LastEditors: Summer Lee
- * @LastEditTime: 2022-07-11 22:11:10
+ * @LastEditTime: 2022-07-12 11:19:56
  */
-import React from 'react'
+import React, { useState } from 'react'
 import Notification from './Notification'
-import { useSelector } from 'react-redux'
+import loginService from '../services/login'
+import blogService from '../services/blogs'
+import { useDispatch } from 'react-redux'
+import { setUser } from '../reducers/userReducer'
+import { setMessage } from '../reducers/messageReducer'
 
-const LoginForm = ({
-	handleLogin,
-	username,
-	password,
-	handleUsernameChange,
-	handlePasswordChange,
-}) => {
-	const message = useSelector((state) => state.message)
-	const messageStatus = useSelector((state) => state.messageStatus)
+const LoginForm = () => {
+	const [username, setUsername] = useState('')
+	const [password, setPassword] = useState('')
+	const dispatch = useDispatch()
+
+	const handleLogin = async (event) => {
+		event.preventDefault()
+
+		try {
+			const user = await loginService.login({
+				username,
+				password,
+			})
+
+			window.localStorage.setItem('loggedBlogappUser', JSON.stringify(user))
+			blogService.setToken(user.token)
+			dispatch(setUser(user))
+			setUsername('')
+			setPassword('')
+		} catch (exception) {
+			dispatch(setMessage('wrong username or password', 'error'))
+		}
+	}
 
 	return (
 		<div>
 			<h2>log in to application</h2>
 
-			<Notification message={message} messageStatus={messageStatus} />
+			<Notification />
 
 			<form onSubmit={handleLogin}>
 				<div>
@@ -32,7 +50,7 @@ const LoginForm = ({
 						type="text"
 						value={username}
 						name="Username"
-						onChange={handleUsernameChange}
+						onChange={({ target }) => setUsername(target.value)}
 					/>
 				</div>
 				<div>
@@ -42,7 +60,7 @@ const LoginForm = ({
 						type="password"
 						value={password}
 						name="Password"
-						onChange={handlePasswordChange}
+						onChange={({ target }) => setPassword(target.value)}
 					/>
 				</div>
 				<button id="login-button" type="submit">
