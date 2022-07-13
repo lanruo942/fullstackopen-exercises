@@ -2,7 +2,7 @@
  * @Author: Summer Lee
  * @Date: 2022-07-12 11:24:05
  * @LastEditors: Summer Lee
- * @LastEditTime: 2022-07-13 00:57:50
+ * @LastEditTime: 2022-07-13 15:24:19
  */
 import React from 'react'
 import { useSelector } from 'react-redux'
@@ -13,7 +13,6 @@ const Users = () => {
 
 	return (
 		<div>
-			<h2>Users List</h2>
 			<table>
 				<thead>
 					<tr>

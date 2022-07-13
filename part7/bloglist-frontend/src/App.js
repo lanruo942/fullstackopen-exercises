@@ -2,7 +2,7 @@
  * @Author: Summer Lee
  * @Date: 2022-06-17 03:13:07
  * @LastEditors: Summer Lee
- * @LastEditTime: 2022-07-13 01:37:28
+ * @LastEditTime: 2022-07-13 15:21:50
  */
 import { useEffect, useRef } from 'react'
 import LoginForm from './components/LoginForm'
@@ -18,7 +18,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { initializeBlogs } from './reducers/blogReducer'
 import { initializeUsersInfo } from './reducers/usersInfoReducer'
 import { setUser } from './reducers/userReducer'
-import { Routes, Route, Link, Navigate, useMatch } from 'react-router-dom'
+import { Routes, Route, Navigate, useMatch } from 'react-router-dom'
 
 const App = () => {
 	const loginUser = useSelector((state) => state.user)
