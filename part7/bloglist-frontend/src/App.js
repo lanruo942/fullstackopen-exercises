@@ -2,7 +2,7 @@
  * @Author: Summer Lee
  * @Date: 2022-06-17 03:13:07
  * @LastEditors: Summer Lee
- * @LastEditTime: 2022-07-13 15:21:50
+ * @LastEditTime: 2022-07-13 15:42:38
  */
 import { useEffect, useRef } from 'react'
 import LoginForm from './components/LoginForm'
@@ -13,6 +13,7 @@ import Header from './components/Header'
 import Users from './components/Users'
 import UserView from './components/UserView'
 import BlogView from './components/Blogs/View'
+import Navigation from './components/Navigation'
 import blogService from './services/blogs'
 import { useSelector, useDispatch } from 'react-redux'
 import { initializeBlogs } from './reducers/blogReducer'
@@ -53,6 +54,7 @@ const App = () => {
 
 	return (
 		<div>
+			<Navigation />
 			<Routes>
 				<Route
 					path="/"

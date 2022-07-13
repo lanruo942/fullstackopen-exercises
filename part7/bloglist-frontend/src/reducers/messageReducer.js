@@ -2,7 +2,7 @@
  * @Author: Summer Lee
  * @Date: 2022-07-11 21:17:44
  * @LastEditors: Summer Lee
- * @LastEditTime: 2022-07-13 01:19:01
+ * @LastEditTime: 2022-07-14 00:38:56
  */
 import { createSlice } from '@reduxjs/toolkit'
 import { changeMessageStatus } from './messageStatusReducer'
@@ -31,7 +31,6 @@ export const setMessage = (message, messageStatus = 'success', timer = 5) => {
 		clearTimeout(prevSetTimeout)
 		prevSetTimeout = setTimeout(() => {
 			dispatch(clearMessage())
-			console.log('clear message')
 		}, timer * 1000)
 	}
 }

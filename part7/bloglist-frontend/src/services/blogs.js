@@ -2,7 +2,7 @@
  * @Author: Summer Lee
  * @Date: 2022-06-17 03:13:07
  * @LastEditors: Summer Lee
- * @LastEditTime: 2022-07-11 18:57:54
+ * @LastEditTime: 2022-07-13 19:24:29
  */
 import axios from 'axios'
 const baseUrl = '/api/blogs'
@@ -32,6 +32,11 @@ const update = async (id, newObject) => {
 	return response.data
 }
 
+const addComment = async (id, comment) => {
+	const response = await axios.post(`${baseUrl}/${id}/comments`, comment)
+	return response.data
+}
+
 const remove = async (id) => {
 	const config = {
 		headers: { Authorization: token },
@@ -41,4 +46,4 @@ const remove = async (id) => {
 	return response.data
 }
 
-export default { setToken, getAll, create, update, remove }
+export default { setToken, getAll, create, update, addComment, remove }

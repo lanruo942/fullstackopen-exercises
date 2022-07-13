@@ -20,7 +20,8 @@
     "jsonwebtoken": "^8.5.1",
     "lodash": "^4.17.21",
     "mongoose": "^6.2.8",
-    "mongoose-unique-validator": "^3.0.0"
+    "mongoose-unique-validator": "^3.0.0",
+    "nanoid": "^3.3.4"
   },
   "devDependencies": {
     "cross-env": "^7.0.3",

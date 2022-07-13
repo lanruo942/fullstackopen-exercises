@@ -2,7 +2,7 @@
  * @Author: Summer Lee
  * @Date: 2022-07-12 00:57:42
  * @LastEditors: Summer Lee
- * @LastEditTime: 2022-07-12 10:53:52
+ * @LastEditTime: 2022-07-13 19:22:24
  */
 import { createSlice } from '@reduxjs/toolkit'
 import blogService from '../services/blogs'
@@ -73,6 +73,17 @@ export const likesBlog = (blog) => {
 					'error'
 				)
 			)
+		}
+	}
+}
+
+export const addComment = (id, comment) => {
+	return async (dispatch) => {
+		try {
+			const updatedBlog = await blogService.addComment(id, { comment })
+			dispatch(updateBlog(updatedBlog))
+		} catch (error) {
+			dispatch(setMessage(error.message, 'error'))
 		}
 	}
 }
