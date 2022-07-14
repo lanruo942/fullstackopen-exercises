@@ -13,3 +13,5 @@ README.md
 .gitignore
 .prettierrc.json
 cypress.config.json
+tailwind.config.js
+postcss.config.js

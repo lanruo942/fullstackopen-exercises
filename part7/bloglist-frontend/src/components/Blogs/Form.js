@@ -1,8 +1,8 @@
 /*
  * @Author: Summer Lee
  * @Date: 2022-06-17 17:52:36
- * @LastEditors: Summer Lee
- * @LastEditTime: 2022-07-12 02:29:14
+ * @LastEditors: Summer Lee lee@summer.today
+ * @LastEditTime: 2022-07-15 00:48:27
  */
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
@@ -32,9 +32,9 @@ const BlogsForm = () => {
 
 	return (
 		<div>
-			<h2>Create a new blog</h2>
-			<form onSubmit={addBlog}>
-				<div>
+			<h2 className="text-xl font-semibold mb-2">Create a new blog</h2>
+			<form className="mb-2" onSubmit={addBlog}>
+				<div className="mb-2">
 					<label htmlFor="Title">title: </label>
 					<input
 						id="blog-title"
@@ -42,9 +42,10 @@ const BlogsForm = () => {
 						value={title}
 						name="Title"
 						onChange={({ target }) => setTitle(target.value)}
+						className="w-auto px-2 rounded-md border-2 border-gray-300"
 					/>
 				</div>
-				<div>
+				<div className="mb-2">
 					<label htmlFor="Author">author: </label>
 					<input
 						id="blog-author"
@@ -52,9 +53,10 @@ const BlogsForm = () => {
 						value={author}
 						name="Author"
 						onChange={({ target }) => setAuthor(target.value)}
+						className="w-auto px-2 rounded-md border-2 border-gray-300"
 					/>
 				</div>
-				<div>
+				<div className="mb-2">
 					<label htmlFor="Url">url: </label>
 					<input
 						id="blog-url"
@@ -62,9 +64,14 @@ const BlogsForm = () => {
 						value={url}
 						name="Url"
 						onChange={({ target }) => setUrl(target.value)}
+						className="w-auto px-2 rounded-md border-2 border-gray-300"
 					/>
 				</div>
-				<button id="create-button" type="submit">
+				<button
+					id="create-button"
+					type="submit"
+					className="bg-slate-200 py-1 px-2 rounded"
+				>
 					create
 				</button>
 			</form>

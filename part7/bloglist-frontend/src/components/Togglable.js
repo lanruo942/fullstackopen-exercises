@@ -1,8 +1,8 @@
 /*
  * @Author: Summer Lee
  * @Date: 2022-06-23 03:14:41
- * @LastEditors: Summer Lee
- * @LastEditTime: 2022-06-27 16:50:01
+ * @LastEditors: Summer Lee lee@summer.today
+ * @LastEditTime: 2022-07-15 00:41:29
  */
 import React, { useState, forwardRef, useImperativeHandle } from 'react'
 import PropTypes from 'prop-types'
@@ -26,11 +26,21 @@ const Togglable = forwardRef((props, ref) => {
 	return (
 		<div>
 			<div style={hideWhenVisible}>
-				<button onClick={toggleVisibility}>{props.buttonLabel}</button>
+				<button
+					className="bg-slate-200 py-1 px-2 rounded"
+					onClick={toggleVisibility}
+				>
+					{props.buttonLabel}
+				</button>
 			</div>
 			<div style={showWhenVisible}>
 				{props.children}
-				<button onClick={toggleVisibility}>cancel</button>
+				<button
+					className="bg-slate-200 py-1 px-2 rounded"
+					onClick={toggleVisibility}
+				>
+					cancel
+				</button>
 			</div>
 		</div>
 	)

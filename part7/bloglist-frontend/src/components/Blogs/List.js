@@ -1,8 +1,8 @@
 /*
  * @Author: Summer Lee
  * @Date: 2022-06-17 16:45:21
- * @LastEditors: Summer Lee
- * @LastEditTime: 2022-07-12 17:22:50
+ * @LastEditors: Summer Lee lee@summer.today
+ * @LastEditTime: 2022-07-15 00:49:25
  */
 import React from 'react'
 import Blog from './Blog'
@@ -12,7 +12,7 @@ const BlogsList = ({ children }) => {
 	const blogs = useSelector((state) => state.blogs)
 
 	return (
-		<div>
+		<div className="mx-3">
 			{children}
 
 			{blogs.map((blog) => (

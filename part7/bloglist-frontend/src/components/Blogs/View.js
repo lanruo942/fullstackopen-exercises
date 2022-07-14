@@ -1,8 +1,8 @@
 /*
  * @Author: Summer Lee
  * @Date: 2022-07-13 01:27:05
- * @LastEditors: Summer Lee
- * @LastEditTime: 2022-07-14 00:37:00
+ * @LastEditors: Summer Lee lee@summer.today
+ * @LastEditTime: 2022-07-15 01:45:18
  */
 import React from 'react'
 import Header from '../Header'
@@ -20,26 +20,46 @@ const BlogView = ({ blog }) => {
 	}
 
 	return (
-		<div>
+		<div className="mx-3">
 			<Header title="blogs" />
-			<h2>{blog.title}</h2>
-			<div>
-				<a href={blog.url}>{blog.url}</a>
+			<h2 className="text-xl font-semibold mb-2">{blog.title}</h2>
+			<div className="mb-2">
+				<a href={blog.url} className="hover:text-slate-500">
+					{blog.url}
+				</a>
 			</div>
-			<div>
+			<div className="mb-2">
 				{blog.likes} likes{' '}
-				<button onClick={() => dispatch(likesBlog(blog))}>like</button>
+				<button
+					className="bg-slate-200 px-2 rounded hover:bg-slate-600 hover:text-white"
+					onClick={() => dispatch(likesBlog(blog))}
+				>
+					like
+				</button>
 			</div>
-			<div>added by {blog.user ? blog.user.name : 'anonymous'}</div>
-			<div>
-				<h3>comments</h3>
+			<div className="mb-2">
+				added by {blog.user ? blog.user.name : 'anonymous'}
+			</div>
+			<div className="mb-2">
+				<h3 className="font-semibold mb-2 mt-6">comments</h3>
 				<form onSubmit={handleComment}>
-					<input type="text" name="comment" />
-					<button type="submit">add comment</button>
+					<input
+						className="w-auto px-2 mr-2 rounded-md border-2 border-gray-300"
+						type="text"
+						name="comment"
+					/>
+					<button
+						className="bg-slate-200 px-2 rounded hover:bg-slate-600 hover:text-white"
+						type="submit"
+					>
+						add comment
+					</button>
 				</form>
-				<ul>
+				<ul className="ml-5">
 					{blog.comments.map((comment) => (
-						<li key={comment.id}>{comment.text}</li>
+						<li key={comment.id} className="list-decimal">
+							{comment.text}
+						</li>
 					))}
 				</ul>
 			</div>

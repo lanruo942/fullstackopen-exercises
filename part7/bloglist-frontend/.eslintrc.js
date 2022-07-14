@@ -2,7 +2,7 @@
  * @Author: Summer Lee
  * @Date: 2022-06-25 14:35:44
  * @LastEditors: Summer Lee
- * @LastEditTime: 2022-07-11 19:39:55
+ * @LastEditTime: 2022-07-14 12:34:24
  */
 /* eslint-env node */
 module.exports = {
@@ -40,7 +40,7 @@ module.exports = {
 		'no-unused-vars': 'off',
 		'no-console': 0,
 		'react/prop-types': 0,
-		'react/react-in-jsx-scope': 'off'
+		'react/react-in-jsx-scope': 'off',
 	},
 	'settings': {
 		'react': {

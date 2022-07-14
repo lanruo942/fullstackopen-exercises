@@ -1,8 +1,8 @@
 /*
  * @Author: Summer Lee
  * @Date: 2022-06-17 03:13:07
- * @LastEditors: Summer Lee
- * @LastEditTime: 2022-07-13 15:42:38
+ * @LastEditors: Summer Lee lee@summer.today
+ * @LastEditTime: 2022-07-15 01:51:52
  */
 import { useEffect, useRef } from 'react'
 import LoginForm from './components/LoginForm'
@@ -78,15 +78,7 @@ const App = () => {
 					}
 				/>
 				<Route path="/blogs/:id" element={<BlogView blog={blog} />} />
-				<Route
-					path="/users"
-					element={
-						<div>
-							<Header title="Users" />
-							<Users />
-						</div>
-					}
-				/>
+				<Route path="/users" element={<Users />} />
 				<Route path="/users/:id" element={<UserView user={user} />} />
 				<Route path="/login" element={<LoginForm />} />
 			</Routes>

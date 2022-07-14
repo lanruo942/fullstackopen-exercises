@@ -1,20 +1,14 @@
 /*
  * @Author: Summer Lee
  * @Date: 2022-07-13 15:37:31
- * @LastEditors: Summer Lee
- * @LastEditTime: 2022-07-13 15:42:01
+ * @LastEditors: Summer Lee lee@summer.today
+ * @LastEditTime: 2022-07-15 00:01:00
  */
 import React from 'react'
-import styled from 'styled-components'
 import { Link, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import blogService from '../services/blogs'
 import { setUser } from '../reducers/userReducer'
-
-const NavigationDiv = styled.div`
-	background: #f5f5f5;
-	padding: 1em;
-`
 
 const Navigation = () => {
 	const loginUser = useSelector((state) => state.user)
@@ -27,22 +21,31 @@ const Navigation = () => {
 		dispatch(setUser(null))
 		navigate('/')
 	}
-	const padding = {
-		padding: 5,
-	}
+
 	return (
-		<NavigationDiv>
-			<Link style={padding} to="/blogs">
-				blogs
-			</Link>
-			<Link style={padding} to="/users">
-				users
-			</Link>
-			<span>
-				{loginUser.name} logged-in
-				<button onClick={handleLogout}>logout</button>
-			</span>
-		</NavigationDiv>
+		<>
+			{loginUser ? (
+				<nav className="bg-slate-600 py-2 px-4 flex justify-between">
+					<div className="text-lg space-x-4 text-white">
+						<Link className="hover:text-slate-300" to="/blogs">
+							blogs
+						</Link>
+						<Link className="hover:text-slate-300" to="/users">
+							users
+						</Link>
+					</div>
+					<span className="text-white">
+						{loginUser.name} logged-in
+						<button
+							className="bg-slate-50 py-1 px-2 ml-3 rounded-md text-slate-700 hover:bg-slate-700 hover:text-slate-200"
+							onClick={handleLogout}
+						>
+							log out
+						</button>
+					</span>
+				</nav>
+			) : null}
+		</>
 	)
 }
 
