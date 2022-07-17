@@ -2,10 +2,11 @@
  * @Author: Summer Lee
  * @Date: 2022-07-18 01:51:31
  * @LastEditors: Summer Lee lee@summer.today
- * @LastEditTime: 2022-07-18 03:09:37
+ * @LastEditTime: 2022-07-18 03:41:08
  */
 import { useQuery } from '@apollo/client'
 import { ALL_AUTHORS } from '../queries'
+import AuthorsForm from './AuthorsForm'
 
 const Authors = (props) => {
 	const results = useQuery(ALL_AUTHORS)
@@ -39,6 +40,7 @@ const Authors = (props) => {
 					))}
 				</tbody>
 			</table>
+			<AuthorsForm />
 		</div>
 	)
 }

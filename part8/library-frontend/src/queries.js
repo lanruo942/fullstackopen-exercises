@@ -2,7 +2,7 @@
  * @Author: Summer Lee
  * @Date: 2022-07-18 03:00:09
  * @LastEditors: Summer Lee lee@summer.today
- * @LastEditTime: 2022-07-18 03:19:38
+ * @LastEditTime: 2022-07-18 03:37:28
  */
 import { gql } from '@apollo/client'
 
@@ -45,6 +45,17 @@ export const CREATE_BOOK = gql`
 			published
 			author
 			id
+		}
+	}
+`
+
+export const UPDATE_AUTHOR = gql`
+	mutation EditBook($name: String!, $setBornTo: Int) {
+		editAuthor(name: $name, setBornTo: $setBornTo) {
+			name
+			born
+			id
+			bookCount
 		}
 	}
 `
