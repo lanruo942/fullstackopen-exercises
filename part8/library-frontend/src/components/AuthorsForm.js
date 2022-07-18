@@ -2,10 +2,10 @@
  * @Author: Summer Lee
  * @Date: 2022-07-18 03:33:50
  * @LastEditors: Summer Lee lee@summer.today
- * @LastEditTime: 2022-07-18 03:46:11
+ * @LastEditTime: 2022-07-18 22:53:38
  */
 import React, { useState } from 'react'
-import { useMutation } from '@apollo/client'
+import { useMutation, useQuery } from '@apollo/client'
 import { ALL_AUTHORS, UPDATE_AUTHOR } from '../queries'
 
 const AuthrosForm = () => {
@@ -15,6 +15,9 @@ const AuthrosForm = () => {
 	const [updateAuthor] = useMutation(UPDATE_AUTHOR, {
 		refetchQueries: [{ query: ALL_AUTHORS }],
 	})
+
+	const results = useQuery(ALL_AUTHORS)
+	const authors = results.data.allAuthors
 
 	const submit = (event) => {
 		event.preventDefault()
@@ -33,10 +36,13 @@ const AuthrosForm = () => {
 			<form onSubmit={submit}>
 				<div>
 					name
-					<input
-						value={name}
-						onChange={({ target }) => setName(target.value)}
-					/>
+					<select value={name} onChange={({ target }) => setName(target.value)}>
+						{authors.map((a) => (
+							<option key={a.id} value={a.name}>
+								{a.name}
+							</option>
+						))}
+					</select>
 				</div>
 				<div>
 					born
