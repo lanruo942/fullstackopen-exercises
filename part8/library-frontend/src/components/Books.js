@@ -2,23 +2,30 @@
  * @Author: Summer Lee
  * @Date: 2022-07-18 01:51:31
  * @LastEditors: Summer Lee lee@summer.today
- * @LastEditTime: 2022-07-20 20:11:26
+ * @LastEditTime: 2022-07-20 23:40:53
  */
+import { useState } from 'react'
 import { useQuery } from '@apollo/client'
-import { ALL_BOOKS } from '../queries'
+import { ALL_BOOKS, FIND_BOOKS } from '../queries'
 
 const Books = (props) => {
-	const results = useQuery(ALL_BOOKS)
+	const [genre, setGenre] = useState(null)
+	const booksResults = useQuery(ALL_BOOKS)
+	const findBooksResults = useQuery(FIND_BOOKS, {
+		variables: { genre },
+	})
 
 	if (!props.show) {
 		return null
 	}
 
-	if (results.loading) {
+	if (findBooksResults.loading) {
 		return <div>Loading...</div>
 	}
 
-	const books = results.data.allBooks
+	const books = booksResults.data.allBooks
+	const findBooks = findBooksResults.data.allBooks
+	const genres = [...new Set(books.map((b) => b.genres).flat())]
 
 	return (
 		<div>
@@ -31,7 +38,7 @@ const Books = (props) => {
 						<th>author</th>
 						<th>published</th>
 					</tr>
-					{books.map((a) => (
+					{findBooks.map((a) => (
 						<tr key={a.id}>
 							<td>{a.title}</td>
 							<td>{a.author.name}</td>
@@ -40,6 +47,14 @@ const Books = (props) => {
 					))}
 				</tbody>
 			</table>
+			<div>
+				{genres.map((genre) => (
+					<button key={genre} onClick={() => setGenre(genre)}>
+						{genre}
+					</button>
+				))}
+				<button onClick={() => setGenre(null)}>all genres</button>
+			</div>
 		</div>
 	)
 }

@@ -2,7 +2,7 @@
  * @Author: Summer Lee
  * @Date: 2022-07-18 03:00:09
  * @LastEditors: Summer Lee lee@summer.today
- * @LastEditTime: 2022-07-20 20:53:39
+ * @LastEditTime: 2022-07-20 23:36:40
  */
 import { gql } from '@apollo/client'
 
@@ -27,6 +27,23 @@ export const ALL_BOOKS = gql`
 				born
 				id
 			}
+			genres
+			id
+		}
+	}
+`
+
+export const FIND_BOOKS = gql`
+	query FindBooks($genre: String) {
+		allBooks(genre: $genre) {
+			title
+			published
+			author {
+				name
+				born
+				id
+			}
+			genres
 			id
 		}
 	}

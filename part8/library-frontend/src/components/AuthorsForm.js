@@ -2,7 +2,7 @@
  * @Author: Summer Lee
  * @Date: 2022-07-18 03:33:50
  * @LastEditors: Summer Lee lee@summer.today
- * @LastEditTime: 2022-07-20 20:51:53
+ * @LastEditTime: 2022-07-20 23:10:52
  */
 import React, { useState, useEffect } from 'react'
 import { useMutation, useQuery } from '@apollo/client'
@@ -23,7 +23,7 @@ const AuthrosForm = () => {
 		if (authors) {
 			setName(authors[0].name)
 		}
-	})
+	}, [authors])
 
 	const submit = (event) => {
 		event.preventDefault()
