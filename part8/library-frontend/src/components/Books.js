@@ -2,7 +2,7 @@
  * @Author: Summer Lee
  * @Date: 2022-07-18 01:51:31
  * @LastEditors: Summer Lee lee@summer.today
- * @LastEditTime: 2022-07-18 03:16:19
+ * @LastEditTime: 2022-07-20 20:11:26
  */
 import { useQuery } from '@apollo/client'
 import { ALL_BOOKS } from '../queries'
@@ -34,7 +34,7 @@ const Books = (props) => {
 					{books.map((a) => (
 						<tr key={a.id}>
 							<td>{a.title}</td>
-							<td>{a.author}</td>
+							<td>{a.author.name}</td>
 							<td>{a.published}</td>
 						</tr>
 					))}

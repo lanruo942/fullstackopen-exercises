@@ -2,7 +2,7 @@
  * @Author: Summer Lee
  * @Date: 2022-07-18 03:00:09
  * @LastEditors: Summer Lee lee@summer.today
- * @LastEditTime: 2022-07-18 03:37:28
+ * @LastEditTime: 2022-07-20 20:10:31
  */
 import { gql } from '@apollo/client'
 
@@ -22,7 +22,11 @@ export const ALL_BOOKS = gql`
 		allBooks {
 			title
 			published
-			author
+			author {
+				name
+				born
+				id
+			}
 			id
 		}
 	}
