@@ -2,9 +2,9 @@
  * @Author: Summer Lee
  * @Date: 2022-07-18 03:33:50
  * @LastEditors: Summer Lee lee@summer.today
- * @LastEditTime: 2022-07-18 22:53:38
+ * @LastEditTime: 2022-07-20 20:51:53
  */
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useMutation, useQuery } from '@apollo/client'
 import { ALL_AUTHORS, UPDATE_AUTHOR } from '../queries'
 
@@ -18,6 +18,12 @@ const AuthrosForm = () => {
 
 	const results = useQuery(ALL_AUTHORS)
 	const authors = results.data.allAuthors
+
+	useEffect(() => {
+		if (authors) {
+			setName(authors[0].name)
+		}
+	})
 
 	const submit = (event) => {
 		event.preventDefault()
