@@ -60,20 +60,37 @@ const resolvers = {
 		bookCount: async () => Book.collection.countDocuments(),
 		authorCount: async () => Author.collection.countDocuments(),
 		allBooks: async (root, args) => {
+			let books
+			const author = await Author.findOne({ name: args.author })
+
 			if (!args.author && !args.genre) {
-				return Book.find({}).populate('author')
-			}
-			if (args.author && !args.genre) {
-				return Book.find({ author: args.author }).populate('author')
-			}
-			if (!args.author && args.genre) {
-				return Book.find({ genres: args.genre }).populate('author')
+				books = await Book.find({}).populate('author')
+			} else if (args.author && !args.genre) {
+				books = await Book.find({ author: author._id }).populate('author')
+			} else if (!args.author && args.genre) {
+				books = await Book.find({ genres: args.genre }).populate('author')
+			} else {
+				console.log(args.genre)
+
+				books = await Book.find({
+					author: author._id,
+					genres: args.genre,
+				}).populate('author')
 			}
 
-			return Book.find({
-				author: args.author,
-				genres: { $exits: args.genre },
-			}).populate('author')
+			return books.map((book) => {
+				return {
+					...book._doc,
+					id: book._id.toString(),
+					author: {
+						...book.author._doc,
+						id: book.author._id.toString(),
+						bookCount: books.filter(
+							(b) => b.author._id.toString() === book.author._id.toString()
+						).length,
+					},
+				}
+			})
 		},
 		allAuthors: async () => {
 			const authors = await Author.find({})
@@ -119,14 +136,22 @@ const resolvers = {
 			await author.save()
 			return author
 		},
-		editAuthor: (root, args) => {
-			const author = authors.find((a) => a.name === args.name)
+		editAuthor: async (root, args) => {
+			const author = await Author.findOne({ name: args.name })
+			const books = await Book.find({ author: author._id })
 			if (!author) {
 				return null
 			}
 
-			author.born = args.setBornTo
-			return author
+			author.born = Number(args.setBornTo)
+			await author.save()
+			return {
+				...author._doc,
+				id: author._id.toString(),
+				bookCount: books.filter(
+					(b) => b.author._id.toString() === author._id.toString()
+				).length,
+			}
 		},
 	},
 }
