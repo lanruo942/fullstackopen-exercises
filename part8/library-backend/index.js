@@ -110,6 +110,7 @@ const resolvers = {
 	Mutation: {
 		addBook: async (root, args) => {
 			const bookInDb = await Book.findOne({ title: args.title })
+
 			if (bookInDb) {
 				throw new UserInputError('Book already exists', {
 					invalidArgs: args.title,
@@ -117,13 +118,22 @@ const resolvers = {
 			}
 
 			let author = await Author.findOne({ name: args.author })
+
 			if (!author) {
 				author = new Author({ name: args.author })
-				await author.save()
+				await author.save().catch((error) => {
+					throw new UserInputError(error.message, {
+						invalidArgs: args.author,
+					})
+				})
 			}
 
 			const book = new Book({ ...args, author: author._id })
-			await book.save()
+			await book.save().catch((error) => {
+				throw new UserInputError(error.message, {
+					invalidArgs: args,
+				})
+			})
 
 			return {
 				...book._doc,
@@ -133,18 +143,29 @@ const resolvers = {
 		},
 		addAuthor: async (root, args) => {
 			const author = new Author({ ...args })
-			await author.save()
+			await author.save().catch((error) => {
+				throw new UserInputError(error.message, {
+					invalidArgs: args,
+				})
+			})
 			return author
 		},
 		editAuthor: async (root, args) => {
 			const author = await Author.findOne({ name: args.name })
-			const books = await Book.find({ author: author._id })
+
 			if (!author) {
 				return null
 			}
 
+			const books = await Book.find({ author: author._id })
+
 			author.born = Number(args.setBornTo)
-			await author.save()
+			await author.save().catch((error) => {
+				throw new UserInputError(error.message, {
+					invalidArgs: args,
+				})
+			})
+
 			return {
 				...author._doc,
 				id: author._id.toString(),
