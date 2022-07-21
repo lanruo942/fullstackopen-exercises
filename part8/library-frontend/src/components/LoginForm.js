@@ -2,7 +2,7 @@
  * @Author: Summer Lee
  * @Date: 2022-07-20 20:13:41
  * @LastEditors: Summer Lee lee@summer.today
- * @LastEditTime: 2022-07-20 20:38:08
+ * @LastEditTime: 2022-07-21 13:15:44
  */
 import { useState, useEffect } from 'react'
 import { useMutation } from '@apollo/client'
@@ -30,6 +30,9 @@ const LoginForm = ({ show, setToken, setPage }) => {
 	const handleSubmit = (e) => {
 		e.preventDefault()
 		login({ variables: { username, password } })
+
+		setUsername('')
+		setPassword('')
 	}
 
 	return (

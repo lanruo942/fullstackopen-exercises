@@ -2,7 +2,7 @@
  * @Author: Summer Lee
  * @Date: 2022-07-18 03:00:09
  * @LastEditors: Summer Lee lee@summer.today
- * @LastEditTime: 2022-07-20 23:36:40
+ * @LastEditTime: 2022-07-20 23:53:59
  */
 import { gql } from '@apollo/client'
 
@@ -90,6 +90,16 @@ export const LOGIN = gql`
 	mutation Login($username: String!, $password: String!) {
 		login(username: $username, password: $password) {
 			value
+		}
+	}
+`
+
+export const ME = gql`
+	query Me {
+		me {
+			username
+			favouriteGenre
+			id
 		}
 	}
 `

@@ -2,7 +2,7 @@
  * @Author: Summer Lee
  * @Date: 2022-07-18 03:33:50
  * @LastEditors: Summer Lee lee@summer.today
- * @LastEditTime: 2022-07-20 23:10:52
+ * @LastEditTime: 2022-07-21 12:31:47
  */
 import React, { useState, useEffect } from 'react'
 import { useMutation, useQuery } from '@apollo/client'
@@ -12,9 +12,7 @@ const AuthrosForm = () => {
 	const [name, setName] = useState('')
 	const [born, setBorn] = useState('')
 
-	const [updateAuthor] = useMutation(UPDATE_AUTHOR, {
-		refetchQueries: [{ query: ALL_AUTHORS }],
-	})
+	const [updateAuthor] = useMutation(UPDATE_AUTHOR)
 
 	const results = useQuery(ALL_AUTHORS)
 	const authors = results.data.allAuthors
