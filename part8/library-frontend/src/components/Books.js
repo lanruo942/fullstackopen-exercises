@@ -2,7 +2,7 @@
  * @Author: Summer Lee
  * @Date: 2022-07-18 01:51:31
  * @LastEditors: Summer Lee lee@summer.today
- * @LastEditTime: 2022-07-20 23:40:53
+ * @LastEditTime: 2022-07-21 14:11:33
  */
 import { useState } from 'react'
 import { useQuery } from '@apollo/client'
@@ -19,7 +19,7 @@ const Books = (props) => {
 		return null
 	}
 
-	if (findBooksResults.loading) {
+	if (findBooksResults.loading || booksResults.loading) {
 		return <div>Loading...</div>
 	}
 

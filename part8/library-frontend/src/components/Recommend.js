@@ -2,7 +2,7 @@
  * @Author: Summer Lee
  * @Date: 2022-07-20 23:55:05
  * @LastEditors: Summer Lee lee@summer.today
- * @LastEditTime: 2022-07-21 13:49:01
+ * @LastEditTime: 2022-07-21 13:53:19
  */
 import { useQuery } from '@apollo/client'
 import { ME, ALL_BOOKS } from '../queries'
@@ -14,14 +14,12 @@ const Recommend = ({ show }) => {
 	if (!show) {
 		return null
 	} else {
-		console.log('startPolling')
 		me.startPolling()
 	}
 
 	if (books.loading || !me.data.me) {
 		return <div>Loading...</div>
 	} else {
-		console.log('stopPolling')
 		me.stopPolling()
 	}
 
