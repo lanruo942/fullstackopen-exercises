@@ -2,7 +2,7 @@
  * @Author: Summer Lee
  * @Date: 2022-07-18 01:51:31
  * @LastEditors: Summer Lee lee@summer.today
- * @LastEditTime: 2022-07-22 02:08:59
+ * @LastEditTime: 2022-07-22 03:05:34
  */
 import { useEffect, useState } from 'react'
 import Authors from './components/Authors'
@@ -11,7 +11,7 @@ import NewBook from './components/NewBook'
 import LoginForm from './components/LoginForm'
 import Recommend from './components/Recommend'
 import { useSubscription, useApolloClient } from '@apollo/client'
-import { BOOK_ADDED } from './queries'
+import { BOOK_ADDED, ALL_AUTHORS, ALL_BOOKS, FIND_BOOKS } from './queries'
 
 const App = () => {
 	const [token, setToken] = useState(null)
@@ -21,7 +21,24 @@ const App = () => {
 	useSubscription(BOOK_ADDED, {
 		onSubscriptionData: ({ subscriptionData }) => {
 			const addedBook = subscriptionData.data.bookAdded
-			window.alert(`${addedBook.title} added`)
+			client.cache.updateQuery({ query: ALL_BOOKS }, ({ allBooks }) => {
+				return {
+					allBooks: allBooks.concat(addedBook),
+				}
+			})
+			client.cache.updateQuery(
+				{ query: FIND_BOOKS, variables: { genre: null } },
+				({ allBooks }) => {
+					return {
+						allBooks: allBooks.concat(addedBook),
+					}
+				}
+			)
+			client.cache.updateQuery({ query: ALL_AUTHORS }, ({ allAuthors }) => {
+				return {
+					allAuthors: allAuthors.concat(addedBook.author),
+				}
+			})
 		},
 	})
 

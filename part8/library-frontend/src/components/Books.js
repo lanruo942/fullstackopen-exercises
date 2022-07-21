@@ -2,7 +2,7 @@
  * @Author: Summer Lee
  * @Date: 2022-07-18 01:51:31
  * @LastEditors: Summer Lee lee@summer.today
- * @LastEditTime: 2022-07-21 14:11:33
+ * @LastEditTime: 2022-07-22 03:02:58
  */
 import { useState } from 'react'
 import { useQuery } from '@apollo/client'
@@ -13,6 +13,7 @@ const Books = (props) => {
 	const booksResults = useQuery(ALL_BOOKS)
 	const findBooksResults = useQuery(FIND_BOOKS, {
 		variables: { genre },
+		fetchPolicy: 'network-only',
 	})
 
 	if (!props.show) {
